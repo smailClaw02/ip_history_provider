@@ -15,7 +15,7 @@ class SourceFactory extends Factory
     {
         return [
             'ip' => $this->faker->unique()->ipv4(),
-            'provider_ip' => $this->faker->ipv4(),
+            'provider_ip' => $this->faker->text(10),
             'vmta' => 'vmta'.$this->faker->randomNumber(3),
             'from' => $this->faker->safeEmail(),
             'return_path' => $this->faker->safeEmail(),
@@ -23,7 +23,7 @@ class SourceFactory extends Factory
             'dkim' => $this->faker->randomElement(['pass', 'fail', 'none', 'permerror', 'temperror', 'policy']),
             'dmark' => $this->faker->randomElement(['pass', 'fail', 'none', 'permerror', 'temperror']),
             'email' => $this->faker->safeEmail(),
-            'message_path' => '/path/to/message_'.$this->faker->uuid(),
+            'message_path' => $this->faker->randomElement(['spam', 'inbox']),
             'colonne' => 'column'.$this->faker->randomNumber(2),
             'redirect_link' => $this->faker->url(),
             'header' => $this->faker->text(200),

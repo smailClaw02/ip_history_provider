@@ -9,7 +9,7 @@ class Source extends Model
 {
     use HasFactory;
 
-    protected $table = 'source';
+    protected $table = 'sources';
 
     protected $fillable = [
         'ip',
