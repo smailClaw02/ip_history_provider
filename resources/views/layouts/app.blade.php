@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
         <div class="container">
             <a class="navbar-brand" href="{{ route('sources.index') }}">IP History Provider</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -42,7 +42,7 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="m-auto">
         @yield('content')
     </div>
 

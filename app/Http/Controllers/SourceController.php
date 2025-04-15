@@ -9,8 +9,23 @@ class SourceController extends Controller
 {
     public function index()
     {
+        // Get paginated sources ordered by date
         $sources = Source::orderBy('date', 'desc')->paginate(15);
-        return view('sources.index', compact('sources'));
+        
+        // Get ALL sources (not paginated) to calculate IP groups
+        $allIps = Source::pluck('ip')->all();
+        
+        // Calculate IP groups (count of IPs sharing first 3 octets)
+        $ipGroups = [];
+        foreach ($allIps as $ip) {
+            $prefix = implode('.', array_slice(explode('.', $ip), 0, 3));
+            $ipGroups[$prefix] = ($ipGroups[$prefix] ?? 0) + 1;
+        }
+        
+        return view('sources.index', [
+            'sources' => $sources,
+            'ipGroups' => $ipGroups
+        ]);
     }
 
     public function create()
@@ -26,6 +41,7 @@ class SourceController extends Controller
             'from' => 'required|email',
             'spf' => 'required|in:pass,fail,softfail,neutral,none,permerror,temperror',
             'dkim' => 'required|in:pass,fail,none,permerror,temperror,policy',
+            'dmark' => 'required|in:pass,fail,none,permerror,temperror',
             'header' => 'required|string',
             'body' => 'required|string',
         ]);

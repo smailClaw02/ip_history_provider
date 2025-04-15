@@ -14,3 +14,31 @@
     font-size: 0.9em;
     padding: 0.35em 0.65em;
 }
+
+.ip-address:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.table tbody tr:hover {
+    --highlight-color: brightness(0.95);
+}
+
+
+
+.ip-row:hover {
+    transform: scale(1.005);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Add to your CSS file */
+.ip-address {
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    transition: background-color 0.2s ease;
+}
+
+.ip-row {
+    transition: background-color 0.2s ease;
+}
