@@ -2,60 +2,63 @@
 
 @section('title', 'All Sources')
 @section('content')
-<div class="m-auto" style="width: 98%;">
+<div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>IP History Provider</h1>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="highlightSimilar">
-            <label class="form-check-label" for="highlightSimilar">Highlight similar IPs</label>
-        </div>
+        <a href="{{ route('sources.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Source
+        </a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
             <tr>
                 <th>ID</th>
                 <th>IP</th>
+		<th>Similar</th>
                 <th>Provider IP</th>
                 <th>VMTA</th>
                 <th>From</th>
                 <th>Return-path</th>
-                <th class="text-center">SPF</th>
+                <th>Message Path</th>
                 <th>Date</th>
                 <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($sources as $source)
+           @foreach($sources as $source)
             @php
-                $ipPrefix = implode('.', array_slice(explode('.', $source->ip), 0, 3));
+                // Get first 3 octets of IP
+                $ipParts = explode('.', $source->ip);
+                $ipPrefix = count($ipParts) >= 3 ? implode('.', array_slice($ipParts, 0, 3)) : $source->ip;
                 $similarCount = $ipGroups[$ipPrefix] ?? 1;
-                $color = $similarCount > 1 ? 'hsl('. (abs(crc32($ipPrefix)) % 360 .', 70%, 90%') : '';
+                
+                // Generate consistent color based on IP prefix
+                $hue = abs(crc32($ipPrefix)) % 360;
+                $color = "hsl({$hue}, 80%, 85%)";
             @endphp
             <tr class="ip-row" 
                 data-ip-prefix="{{ $ipPrefix }}"
                 data-similar-count="{{ $similarCount }}"
-                @if($similarCount > 1) data-highlight-color="{{ $color }}" @endif>
+                data-highlight-color="{{ $color }}">
                 <td>{{ $source->id }}</td>
                 <td>
                     <span class="ip-address">{{ $source->ip }}</span>
-                    @if($similarCount > 1)
-                    <span class="badge bg-dark ms-2">{{ $similarCount }}</span>
-                    @endif
+                </td>
+                <td class="text-center">
+                    @if ($similarCount > 1)
+    <span class="badge bg-success">{{ $similarCount }}</span>
+@elseif ($similarCount == 1)
+    <span class="badge bg-primary">1</span>
+@endif
                 </td>
                 <td>{{ $source->provider_ip }}</td>
                 <td>{{ $source->vmta }}</td>
                 <td>{{ $source->from }}</td>
                 <td>{{ $source->return_path }}</td>
                 <td class="text-center">
-                    <span class="badge fs-6 bg-{{ $source->spf === 'pass' ? 'success' : 'danger' }}">
-                        {{ $source->spf }}
+                    <span class="badge fs-6 bg-{{ $source->message_path === 'inbox' ? 'success' : 'danger' }}">
+                        {{ $source->message_path }}
                     </span>
                 </td>
                 <td>{{ $source->date }}</td>
@@ -88,22 +91,23 @@
 document.addEventListener('DOMContentLoaded', function() {
     const toggle = document.getElementById('highlightSimilar');
     
-    function applyHighlighting(shouldHighlight) {
+    function applyHighlighting(enable) {
         document.querySelectorAll('.ip-row').forEach(row => {
-            const similarCount = parseInt(row.dataset.similarCount);
-            const color = row.dataset.highlightColor;
-            
-            if (shouldHighlight && similarCount > 1) {
-                row.style.backgroundColor = color;
-                row.querySelector('.ip-address').style.backgroundColor = color;
-            } else {
-                row.style.backgroundColor = '';
-                row.querySelector('.ip-address').style.backgroundColor = '';
+            const count = parseInt(row.dataset.similarCount);
+            if (count > 1) {
+                if (enable) {
+                    const color = row.dataset.highlightColor;
+                    row.style.backgroundColor = color;
+                    row.querySelector('.ip-address').style.backgroundColor = color;
+                } else {
+                    row.style.backgroundColor = '';
+                    row.querySelector('.ip-address').style.backgroundColor = '';
+                }
             }
         });
     }
     
-    // Initial state
+    // Initialize
     applyHighlighting(toggle.checked);
     
     // Toggle event

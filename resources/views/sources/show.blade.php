@@ -4,7 +4,12 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Source Details #{{ $source->id }}</h1>
+	<div class="border border-secondary border-2 rounded-3">
+        	<a href="{{ route('sources.index') }}" class="btn btn-secondary">
+            		<i class="fas fa-arrow-left"></i>
+        	</a> <b class="fs-5 p-2 ">Source #{{ $source->id }}</b>
+    	</div>
+        
         <div class="action-btns">
             <a href="{{ route('sources.edit', $source->id) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit
@@ -31,21 +36,20 @@
                     <p><strong>Provider IP:</strong> <code>{{ $source->provider_ip }}</code></p>
                     <p><strong>VMTA:</strong> {{ $source->vmta }}</p>
                     <p><strong>From:</strong> {{ $source->from }}</p>
-                    <p><strong>Return Path:</strong> {{ $source->return_path }}</p>
+                    <p><strong>Return-Path:</strong> {{ $source->return_path }}</p>
                 </div>
                 <div class="col-md-6">
                     <p><strong>Email:</strong> {{ $source->email }}</p>
                     <p><strong>Date:</strong> {{ $source->date }}</p>
                     <p><strong>Redirect Link:</strong> 
-                        <a href="{{ $source->redirect_link }}" target="_blank">{{ $source->redirect_link }}</a>
+                        <a href="#">{{ $source->redirect_link }}</a>
                     </p>
                     <div class="mt-3">
                         <strong>Domains:</strong>
-                        <ul class="list-inline">
-                            @foreach(json_decode($source->domains) as $domain)
-                            <li class="list-inline-item"><span class="badge bg-secondary">{{ $domain }}</span></li>
-                            @endforeach
-                        </ul>
+                        <textarea class="form-control" rows="5">
+@foreach(json_decode($source->domains) as $domain)
+{{$domain }}
+@endforeach</textarea>
                     </div>
                 </div>
             </div>
@@ -58,23 +62,31 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <p><strong>Message Path:</strong> 
+                        <span class="badge fs-6 bg-{{ $source->message_path === 'inbox' ? 'success' : 'danger' }}">
+                            {{ strtoupper($source->message_path) }}
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-3">
                     <p><strong>SPF:</strong> 
-                        <span class="badge rounded-pill bg-{{ $source->spf === 'pass' ? 'success' : 'danger' }}">
+                        <span class="badge fs-6 bg-{{ $source->spf === 'pass' ? 'success' : 'danger' }}">
                             {{ strtoupper($source->spf) }}
                         </span>
                     </p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <p><strong>DKIM:</strong> 
-                        <span class="badge rounded-pill bg-{{ $source->dkim === 'pass' ? 'success' : 'warning' }}">
+                        <span class="badge fs-6 bg-{{ $source->dkim === 'pass' ? 'success' : 'warning' }}">
                             {{ strtoupper($source->dkim) }}
                         </span>
                     </p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <p><strong>DMARC:</strong> 
-                        <span class="badge rounded-pill bg-{{ $source->dmark === 'pass' ? 'success' : 'danger' }}">
+                        <span class="badge fs-6 bg-{{ $source->dmark === 'pass' ? 'success' : 'danger' }}">
                             {{ strtoupper($source->dmark) }}
                         </span>
                     </p>
@@ -88,18 +100,12 @@
             <h4 class="mb-0">Email Content</h4>
         </div>
         <div class="card-body">
-            <h5>Message Header:</h5>
-            <div class="email-header mb-4">{{ $source->header }}</div>
+            <h5>Header:</h5>
+            <textarea rows="5" class="form-control email-header mb-4">{{ $source->header }}</textarea>
             
-            <h5>Message Body:</h5>
-            <div class="email-body">{{ $source->body }}</div>
+            <h5>Body:</h5>
+            <textarea rows="5" class="form-control email-body mb-4">{{ $source->body }}</textarea>
         </div>
-    </div>
-
-    <div class="mt-4">
-        <a href="{{ route('sources.index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to List
-        </a>
     </div>
 </div>
 @endsection

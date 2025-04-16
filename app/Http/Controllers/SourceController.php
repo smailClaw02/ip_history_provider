@@ -9,24 +9,19 @@ class SourceController extends Controller
 {
     public function index()
     {
-        // Get paginated sources ordered by date
-        $sources = Source::orderBy('date', 'desc')->paginate(15);
-        
-        // Get ALL sources (not paginated) to calculate IP groups
-        $allIps = Source::pluck('ip')->all();
-        
-        // Calculate IP groups (count of IPs sharing first 3 octets)
-        $ipGroups = [];
-        foreach ($allIps as $ip) {
-            $prefix = implode('.', array_slice(explode('.', $ip), 0, 3));
-            $ipGroups[$prefix] = ($ipGroups[$prefix] ?? 0) + 1;
-        }
-        
-        return view('sources.index', [
-            'sources' => $sources,
-            'ipGroups' => $ipGroups
-        ]);
+    $sources = Source::orderBy('date', 'desc')->paginate(15);
+    
+    // Calculate IP groups for highlighting
+    $allIps = Source::pluck('ip')->toArray();
+    $ipGroups = [];
+    
+    foreach ($allIps as $ip) {
+        $prefix = implode('.', array_slice(explode('.', $ip), 0, 3)); // First 3 octets
+        $ipGroups[$prefix] = ($ipGroups[$prefix] ?? 0) + 1;
     }
+    
+    return view('sources.index', compact('sources', 'ipGroups'));
+}
 
     public function create()
     {
