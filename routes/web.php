@@ -9,3 +9,4 @@ Route::get('/', function () {
 
 
 Route::resource('sources', SourceController::class);
+Route::post('/emails', 'EmailController@store')->name('emails.store');
