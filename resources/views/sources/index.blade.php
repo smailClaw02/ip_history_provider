@@ -57,7 +57,7 @@
                 <td>{{ $source->from }}</td>
                 <td>{{ $source->return_path }}</td>
                 <td class="text-center">
-                    <span class="badge fs-6 bg-{{ $source->message_path === 'inbox' ? 'success' : 'danger' }}">
+                    <span class="badge fs-6 text-dark bg-{{ $source->message_path === 'inbox' ? 'success' : 'warning' }}">
                         {{ $source->message_path }}
                     </span>
                 </td>

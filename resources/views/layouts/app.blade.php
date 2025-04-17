@@ -27,16 +27,35 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
-        <div class="container">
+        <div class="row">
             <a class="navbar-brand" href="{{ route('sources.index') }}">IP History Provider</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('sources.create') }}">Create New</a>
+		    <li class="nav-item p-2">
+                        <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('sources.create') }}">Header</a>
                     </li>
+		    <li class="nav-item p-2">
+                        <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('sources.create') }}">Body</a>
+                    </li>
+		    <li class="nav-item p-2">
+                        <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('sources.create') }}">SPF & DMARC</a>
+                    </li>
+		    <li class="nav-item p-2">
+                        <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('sources.create') }}">End Time Drop</a>
+                    </li>
+		    <li class="nav-item p-2">
+                        <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('sources.create') }}">X-delay</a>
+                    </li>
+		    <li class="nav-item p-2">
+                        <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('sources.create') }}">Copy Count</a>
+                    </li>
+		    <li class="nav-item p-2">
+                        <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('tools.random') }}">Random</a>
+                    </li>
+
                 </ul>
             </div>
         </div>

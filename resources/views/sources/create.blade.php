@@ -139,8 +139,6 @@
                                     <select class="form-select" id="message_path" name="message_path">
                                         <option value="inbox">Inbox</option>
                                         <option value="spam">Spam</option>
-                                        <option value="junk">Junk</option>
-                                        <option value="quarantine">Quarantine</option>
                                     </select>
                                 </div>
                             </div>
