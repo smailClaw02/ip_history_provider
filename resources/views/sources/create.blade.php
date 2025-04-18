@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header bg-primary text-white">Create New Email Record</div>
+                <div class="card-header bg-primary text-white">Create New Email source</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('emails.store') }}" enctype="multipart/form-data">
@@ -13,10 +13,10 @@
 
                         <!-- Header Textarea and File Upload -->
                         <div class="form-group mb-4">
-                            <label for="header" class="form-label">Email Headers</label>
+                            <label for="header" class="form-label">Email Source</label>
                             <textarea class="form-control border-primary border-2" id="header" name="header" rows="15" placeholder="Paste email headers here..."></textarea>
                             <div class="mt-2">
-                                <label for="email_file" class="form-label">Or upload email file:</label>
+                                <label for="email_file" class="form-label text-primary">Or upload Email Source file:</label>
                                 <input type="file" id="email_file" class="form-control border p-2 rounded" accept=".eml,.txt,.msg" />
                             </div>
                         </div>

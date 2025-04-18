@@ -26,7 +26,7 @@
             </div>
 
             <!-- Added pattern information section -->
-            <div class="card mt-4">
+            {{-- <div class="card mt-4">
                 <div class="card-header bg-info text-white">
                     <h5 class="mb-0">Random Pattern Formats</h5>
                 </div>
@@ -44,7 +44,7 @@
                     </ul>
                     <p class="mt-3 mb-0"><strong>Note:</strong> Replace <code>N</code> with the desired length of the random string.</p>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
