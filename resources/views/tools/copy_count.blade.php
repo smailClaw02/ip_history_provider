@@ -13,14 +13,14 @@
                     <!-- Text Input -->
                     <div class="col-md-8 mb-3 mb-md-0">
                         <label for="textInput" class="form-label fw-bold">Enter Text:</label>
-                        <input type="text" id="textInput" class="form-control border-dark"
+                        <input type="text" id="textInput" class="form-control "
                             placeholder="Enter text to multiply">
                     </div>
 
                     <!-- Count Input -->
                     <div class="col-md-2 mb-3 mb-md-0">
                         <label for="countInput" class="form-label fw-bold">Count:</label>
-                        <input type="number" id="countInput" class="form-control border-dark" min="1"
+                        <input type="number" id="countInput" class="form-control " min="1"
                             value="10">
                     </div>
 
@@ -35,7 +35,7 @@
                 <!-- Result Area -->
                 <div class="mb-3">
                     <label for="resultText" class="form-label fw-bold">Result:</label>
-                    <textarea id="resultText" class="form-control border-dark" rows="5" readonly
+                    <textarea id="resultText" class="form-control " rows="5" readonly
                         placeholder="Generated text will appear here"></textarea>
                 </div>
 

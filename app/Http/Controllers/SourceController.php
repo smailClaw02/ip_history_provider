@@ -7,21 +7,29 @@ use Illuminate\Http\Request;
 
 class SourceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-    $sources = Source::orderBy('date', 'desc')->paginate(15);
-    
-    // Calculate IP groups for highlighting
-    $allIps = Source::pluck('ip')->toArray();
-    $ipGroups = [];
-    
-    foreach ($allIps as $ip) {
-        $prefix = implode('.', array_slice(explode('.', $ip), 0, 3)); // First 3 octets
-        $ipGroups[$prefix] = ($ipGroups[$prefix] ?? 0) + 1;
+        $query = Source::query()->orderBy('date', 'desc');
+
+        // Add IP search functionality
+        if ($request->has('ip_search') && !empty($request->ip_search)) {
+            $searchTerm = $request->ip_search;
+            $query->where('ip', 'like', '%' . $searchTerm . '%');
+        }
+
+        $sources = $query->paginate(10);
+
+        // Calculate IP groups for highlighting
+        $allIps = Source::pluck('ip')->toArray();
+        $ipGroups = [];
+
+        foreach ($allIps as $ip) {
+            $prefix = implode('.', array_slice(explode('.', $ip), 0, 3)); // First 3 octets
+            $ipGroups[$prefix] = ($ipGroups[$prefix] ?? 0) + 1;
+        }
+
+        return view('sources.index', compact('sources', 'ipGroups'));
     }
-    
-    return view('sources.index', compact('sources', 'ipGroups'));
-}
 
     public function create()
     {

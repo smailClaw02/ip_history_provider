@@ -36,5 +36,15 @@ Route::prefix('tools')->group(function () {
     Route::get('spf-dmarc', function() {
         return view('tools.spf_dmarc');
     })->name('tools.spf-dmarc');
+
+    // Body Filter
+    Route::get('body-filter', function() {
+        return view('tools.body');
+    })->name('tools.body-filter');
+
+    // Header
+    Route::get('header-processor', function() {
+        return view('tools.header');
+    })->name('tools.header-processor');
 });
 

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <div class="card border border-dark ">
+    <div class="card border  ">
         <div class="card-header bg-teal">
             <h2 class="mb-0 text-center">SPF & DMARC Lookup Tool</h2>
         </div>
@@ -20,12 +20,12 @@
                         </div>
                     </div>
                     
-                    <textarea id="domains" class="form-control border border-dark text-success mb-3" rows="6" 
+                    <textarea id="domains" class="form-control border  text-success mb-3" rows="6" 
                         placeholder="Enter domains (one per line)"></textarea>
                     
                     <div class="row g-2 mb-3">
                         <div class="col-md-8">
-                            <input type="file" id="fileInput" class="form-control border border-dark " accept=".txt,.csv">
+                            <input type="file" id="fileInput" class="form-control border  " accept=".txt,.csv">
                         </div>
                         <div class="col-md-4">
                             <button id="lookupBtn" class="btn btn-success w-100">
@@ -36,13 +36,13 @@
                     
                     <div class="mb-3">
                         <label class="form-label text-teal">SPF Mechanisms to Filter</label>
-                        <input type="text" id="spfFilters" class="form-control border border-dark " 
-                            value="exists:%,+all" placeholder="e.g. exists:%,+all,include:">
+                        <input type="text" id="spfFilters" class="form-control border  " 
+                            value="" placeholder="e.g. exists:%,+all,include:">
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label text-teal">Filtered Results</label>
-                        <textarea id="doms_exist" class="form-control border border-dark text-success" rows="5" 
+                        <textarea id="doms_exist" class="form-control border  text-success" rows="5" 
                             placeholder="Matching domains will appear here"></textarea>
                     </div>
                     
@@ -54,9 +54,9 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-teal">Lookup Results</h4>
                         <div class="d-flex gap-2">
-                            <input type="text" id="name_file" class="form-control border border-dark " 
+                            <input type="text" id="name_file" class="form-control border  " 
                                 placeholder="Filename for export">
-                            <button id="exportBtn" class="btn btn-primary">
+                            <button id="exportBtn" class="col-auto btn btn-primary">
                                 <i class="fas fa-file-export me-1"></i> Export
                             </button>
                         </div>
@@ -64,19 +64,19 @@
                     
                     <div class="row g-2 mb-3">
                         <div class="col-md-4">
-                            <div class="border border-dark p-2 rounded text-center">
+                            <div class="border  p-2 rounded text-center">
                                 <small class="text-muted">Start Time</small>
                                 <div id="time_start" class="fw-bold">--:--:--</div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="border border-dark p-2 rounded text-center">
+                            <div class="border  p-2 rounded text-center">
                                 <small class="text-muted">End Time</small>
                                 <div id="time_fin" class="fw-bold">--:--:--</div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="border border-dark p-2 rounded text-center">
+                            <div class="border  p-2 rounded text-center">
                                 <small class="text-muted">Duration</small>
                                 <div id="seconds" class="fw-bold">-- min, -- s</div>
                             </div>

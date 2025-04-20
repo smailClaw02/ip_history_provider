@@ -3,13 +3,10 @@
 @section('title', 'X-Delay Calculator')
 
 @section('content')
-<div class="container py-4">
+<div class="py-4 m-auto" style="width: 98%">
     <div class="card shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h2 class="mb-0">X-Delay Calculator</h2>
-            <button id="themeToggle" class="btn btn-info btn-sm">
-                <i id="themeIcon" class="fas fa-sun"></i>
-            </button>
         </div>
         
         <div class="card-body">
@@ -75,24 +72,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Theme Toggle Functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeIcon.classList.replace('fa-sun', 'fa-moon');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDarkMode = document.body.classList.contains('dark-mode');
-
-            themeIcon.classList.replace(isDarkMode ? 'fa-sun' : 'fa-moon', 
-                                      isDarkMode ? 'fa-moon' : 'fa-sun');
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-        });
-
         // Time Calculation
         function updateTime() {
             const now = new Date();
@@ -157,27 +136,4 @@
         updateTime();
     });
 </script>
-
-<style>
-    body.dark-mode {
-        background-color: #121212;
-        color: #ffffff;
-        transition: all 0.5s ease;
-    }
-    .dark-mode .card,
-    .dark-mode .input-group,
-    .dark-mode .form-control {
-        background-color: #222;
-        border-color: #444;
-        color: #fff;
-    }
-    .dark-mode .form-control:read-only {
-        background-color: #333;
-    }
-    .dark-mode .alert-info {
-        background-color: #003847;
-        border-color: #004b5f;
-        color: #e6f7ff;
-    }
-</style>
 @endsection
