@@ -15,7 +15,7 @@
                 <tr>
                     <th>ID</th>
                     <th>
-                        <form method="GET" action="{{ route('sources.index') }}" class="d-flex">
+                        <form method="GET" action="{{ route('sources.index') }}" class="d-flex align-items-end">
                             IP
                             <input type="text" name="ip_search" class="form-control form-control-sm ms-2"
                                 placeholder="Search IP..." value="{{ request('ip_search') }}">
@@ -32,7 +32,6 @@
                     <th><input class="form-check-input" type="checkbox" id="highlightSimilar">
                         <label class="form-check-label" for="highlightSimilar">Show Similar</label>
                     </th>
-                    <th>Provider IP</th>
                     <th>VMTA</th>
                     <th>From</th>
                     <th>Return-path</th>
@@ -56,8 +55,8 @@
                     <tr class="ip-row" data-ip-prefix="{{ $ipPrefix }}" data-similar-count="{{ $similarCount }}"
                         data-highlight-color="{{ $color }}" data-ip="{{ $source->ip }}">
                         <td>{{ $source->id }}</td>
-                        <td>
-                            <div class="ip-address text-center">{{ $source->ip }}</div>
+                        <td class="text-center">
+                            <span class="ip-address text-center">{{ $source->ip }}</span>
                         </td>
                         <td class="text-center">
                             @if ($similarCount > 1)
@@ -66,7 +65,6 @@
                                 <span class="badge bg-primary">1</span>
                             @endif
                         </td>
-                        <td>{{ $source->provider_ip }}</td>
                         <td>{{ $source->vmta }}</td>
                         <td>{{ $source->from }}</td>
                         <td>{{ $source->return_path }}</td>

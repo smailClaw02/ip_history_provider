@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('return_path');
             $table->enum('spf', ['pass', 'fail', 'softfail', 'neutral', 'none', 'permerror', 'temperror']);
             $table->enum('dkim', ['pass', 'fail', 'none', 'permerror', 'temperror', 'policy']);
-            $table->enum('dmark', ['pass', 'fail', 'none', 'permerror', 'temperror']);
+            $table->enum('dmark', ['pass', 'fail', 'none', 'permerror', 'temperror', 'bestguesspass']);
             $table->timestamp('date');
             $table->string('email');
-            $table->string('message_path');
+            $table->enum('message_path', ['inbox', 'spam']);
             $table->string('colonne');
             $table->string('redirect_link');
             $table->text('header');

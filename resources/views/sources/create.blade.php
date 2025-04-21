@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="py-4 m-auto" style="width: 98%">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-">
             <div class="card">
-                <div class="card-header bg-primary text-white">Create New Email source</div>
+                <div class="card-header bg-primary text-white">Create New Email Source</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('emails.store') }}" enctype="multipart/form-data">
@@ -13,11 +13,11 @@
 
                         <!-- Header Textarea and File Upload -->
                         <div class="form-group mb-4">
-                            <label for="header" class="form-label">Email Source</label>
-                            <textarea class="form-control border-primary border-2" id="header" name="header" rows="15" placeholder="Paste email headers here..."></textarea>
+                            <label for="header_text" class="form-label">Email Source</label>
+                            <textarea class="form-control border-primary border-2" id="header_text" name="header_text" rows="15" placeholder="Paste email headers here..."></textarea>
                             <div class="mt-2">
                                 <label for="email_file" class="form-label text-primary">Or upload Email Source file:</label>
-                                <input type="file" id="email_file" class="form-control border p-2 rounded" accept=".eml,.txt,.msg" />
+                                <input type="file" id="email_file" name="email_file" class="form-control border p-2 rounded" accept=".eml,.txt,.msg" />
                             </div>
                         </div>
 
@@ -69,10 +69,15 @@
                                     <label for="return_path" class="form-label">Return Path</label>
                                     <input type="text" class="form-control" id="return_path" name="return_path">
                                 </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="domains" class="form-label">Domains</label>
+                                    <textarea class="form-control" id="domains" name="domains" rows="10"></textarea>
+                                </div>
                             </div>
 
                             <!-- Right Column -->
-                            <div class="col-md-6">
+                            <div class="col-md-6 row">
                                 <div class="form-group mb-3">
                                     <label for="date" class="form-label">Date</label>
                                     <input type="text" class="form-control" id="date" name="date">
@@ -92,48 +97,52 @@
                                     <label for="redirect_link" class="form-label">Redirect Link</label>
                                     <input type="text" class="form-control" id="redirect_link" name="redirect_link">
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- Select Fields -->
-                        <div class="row mt-3">
-                            <div class="col-md-3">
+
+                            <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="spf" class="form-label">SPF</label>
                                     <select class="form-select" id="spf" name="spf">
-                                        <option value="pass">Pass</option>
-                                        <option value="fail">Fail</option>
-                                        <option value="neutral">Neutral</option>
-                                        <option value="none">None</option>
+                                        <option value="pass">pass</option>
+                                        <option value="fail">fail</option>
+                                        <option value="softfail">softfail</option>
+                                        <option value="neutral">neutral</option>
+                                        <option value="none">none</option>
+                                        <option value="permerror">permerror</option>
+                                        <option value="temperror">temperror</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="dkim" class="form-label">DKIM</label>
                                     <select class="form-select" id="dkim" name="dkim">
-                                        <option value="pass">Pass</option>
-                                        <option value="fail">Fail</option>
-                                        <option value="neutral">Neutral</option>
-                                        <option value="none">None</option>
+                                        <option value="pass">pass</option>
+                                        <option value="fail">fail</option>
+                                        <option value="policy">policy</option>
+                                        <option value="none">none</option>
+                                        <option value="permerror">permerror</option>
+                                        <option value="temperror">temperror</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="dmarc" class="form-label">DMARC</label>
                                     <select class="form-select" id="dmarc" name="dmarc">
-                                        <option value="pass">Pass</option>
-                                        <option value="fail">Fail</option>
-                                        <option value="neutral">Neutral</option>
-                                        <option value="none">None</option>
+                                        <option value="pass">pass</option>
+                                        <option value="fail">fail</option>
+                                        <option value="permerror">permerror</option>
+                                        <option value="temperror">temperror</option>
+                                        <option value="none">none</option>
+                                        <option value="bestguesspass">bestguesspass</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="message_path" class="form-label">Message Path</label>
                                     <select class="form-select" id="message_path" name="message_path">
@@ -145,18 +154,18 @@
                         </div>
 
                         <!-- Text Areas -->
-                        <div class="row mt-3">
+                        <div class="row mt-1">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="body" class="form-label">Email Body</label>
-                                    <textarea class="form-control" id="body" name="body" rows="10"></textarea>
+                                    <label for="header_display" class="form-label">Email Header</label>
+                                    <textarea class="form-control" id="header_display" name="header" rows="10"></textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="domains" class="form-label">Domains</label>
-                                    <textarea class="form-control" id="domains" name="domains" rows="10"></textarea>
+                                    <label for="body" class="form-label">Email Body</label>
+                                    <textarea class="form-control" id="body" name="body" rows="10"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -176,10 +185,13 @@
 
 <script>
     // DOM Elements
-    const headerTextarea = document.getElementById('header');
+    const headerTextarea = document.getElementById('header_text');
     const fileInput = document.getElementById('email_file');
     const parseResultsDiv = document.getElementById('parseResults');
     const resultDisplay = document.getElementById('resultDisplay');
+    
+    // Known TLDs for domain extraction
+    const knownTlds = ["com", "org", "net", "edu", "gov", "co", "io", "uk"]; // Simplified for example
 
     // File Upload Handler
     fileInput.addEventListener('change', function(e) {
@@ -196,8 +208,8 @@
 
     // Main Parsing Function
     async function parseHeaders() {
-        const emailHeaders = headerTextarea.value;
-        if (!emailHeaders.trim()) {
+        const emailSource = headerTextarea.value;
+        if (!emailSource.trim()) {
             alert('Please paste email headers or upload a file first');
             return;
         }
@@ -208,13 +220,13 @@
             parseResultsDiv.style.display = 'block';
 
             // Extract authentication results
-            const authResults = extractAuthResults(emailHeaders);
+            const authResults = extractAuthResults(emailSource);
             
             // Extract domains
-            const domainFrom = extractDomainFromHeaders(emailHeaders, 'From');
-            const domainSender = extractDomainFromHeaders(emailHeaders, 'Sender');
-            const returnPath = extractReturnPath(emailHeaders);
-            const domainMessageId = extractDomainFromMessageId(emailHeaders);
+            const allDomains = extractAllDomains(emailSource);
+            
+            // Extract email body
+            const emailBody = extractEmailBody(emailSource);
             
             // Get ISP information
             let providerIp = "Not available";
@@ -226,8 +238,8 @@
             document.getElementById('ip').value = authResults.client_ip || '';
             document.getElementById('provider_ip').value = providerIp;
             document.getElementById('vmta').value = authResults.helo || '';
-            document.getElementById('from').value = extractFrom(emailHeaders);
-            document.getElementById('return_path').value = returnPath || '';
+            document.getElementById('from').value = extractFrom(emailSource);
+            document.getElementById('return_path').value = extractReturnPath(emailSource) || '';
             document.getElementById('date').value = authResults.date || '';
             document.getElementById('email').value = authResults.email || '';
             
@@ -242,9 +254,12 @@
                 document.getElementById('message_path').value = path || 'inbox';
             }
 
-            // Set domains textarea
-            const domainsText = `From: ${domainFrom}\nSender: ${domainSender || "Not Found"}\nReturn-Path: ${returnPath || "Not Found"}\nMessage-ID: ${domainMessageId || "Not Found"}`;
-            document.getElementById('domains').value = domainsText;
+            // Set domains textarea with all found domains
+            document.getElementById('domains').value = allDomains.join("\n");
+            
+            // Set email body
+            document.getElementById('body').value = emailBody || '';
+            document.getElementById('header_display').value = emailSource;
 
             // Display results
             const resultText = `IP: ${authResults.client_ip || 'N/A'}
@@ -256,9 +271,7 @@ DMARC: ${authResults.dmarc || 'N/A'}
 Date: ${authResults.date || 'N/A'}
 To: ${authResults.email || 'N/A'}
 Message Path: ${authResults.message_path || 'N/A'}
-
-=== Domains ===
-${domainsText}`;
+`;
 
             resultDisplay.textContent = resultText;
 
@@ -268,7 +281,47 @@ ${domainsText}`;
         }
     }
 
-    // Helper Functions
+    // Improved Return-Path extraction
+    function extractReturnPath(headers) {
+        // Try different patterns for Return-Path
+        const patterns = [
+            /Return-Path:\s*<?([^>\s]+)>?/i,
+            /Return-path:\s*<?([^>\s]+)>?/i,
+            /Envelope-Return:\s*<?([^>\s]+)>?/i,
+            /X-Original-Return-Path:\s*<?([^>\s]+)>?/i
+        ];
+
+        for (const pattern of patterns) {
+            const match = headers.match(pattern);
+            if (match && match[1]) {
+                // Clean up the return path
+                let path = match[1].trim();
+                
+                // Remove angle brackets if present
+                path = path.replace(/^</, '').replace(/>$/, '');
+                
+                // Extract domain if it's an email address
+                if (path.includes('@')) {
+                    return path.split('@')[1];
+                }
+                return path;
+            }
+        }
+        
+        // Fallback to looking for Received headers
+        const receivedHeaders = headers.match(/Received:.*?from\s+[^\s]+\s+\(([^)]+)\)/gi);
+        if (receivedHeaders) {
+            for (const header of receivedHeaders) {
+                const domainMatch = header.match(/\(([^)]+)\)/);
+                if (domainMatch && domainMatch[1]) {
+                    return domainMatch[1].trim();
+                }
+            }
+        }
+        
+        return null;
+    }
+
     function extractAuthResults(emailHeaders) {
         const authResultsMatch = emailHeaders.match(/Authentication-Results:.*?spf=(\w+).*?dkim=(\w+).*?dmarc=(\w+)/s);
         const clientIpMatch = emailHeaders.match(/client-ip=([\d\.]+)/);
@@ -310,23 +363,62 @@ ${domainsText}`;
         return match ? match[1] : 'Not Found';
     }
 
-    function extractReturnPath(headers) {
-        const match = headers.match(/Return-Path:.*?<.*?@([^>]+)>/);
-        return match ? match[1] : null;
-    }
-
     function extractFrom(headers) {
         const match = headers.match(/From:.*?<(.+?)>/);
         return match ? match[1] : headers.match(/From:\s*(.+)/)?.[1] || '';
     }
 
     function extractDomainFromMessageId(headers) {
-        const match = headers.match(/Message-ID:.*?@([^>]+)/) || 
-                     headers.match(/Message-Id:.*?@([^>]+)/);
+        const match = headers.match(/Message-ID:.*?@([^>]+)/i) || 
+                     headers.match(/Message-Id:.*?@([^>]+)/i);
         return match ? match[1] : 'Not Found';
     }
 
-    async function getISP(ip) {
+    function extractAllDomains(source) {
+        const domainRegex = new RegExp(`\\b[a-zA-Z0-9.-]+\\.(${knownTlds.join("|")})\\b`, "gi");
+        const domains = source.match(domainRegex) || [];
+        
+        const emailRegex = /\b[A-Za-z0-9._%+-]+@([A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/gi;
+        let emailMatches;
+        const emailDomains = [];
+        
+        while ((emailMatches = emailRegex.exec(source)) !== null) {
+            emailDomains.push(emailMatches[1]);
+        }
+        
+        return [...new Set([...domains, ...emailDomains])];
+    }
+
+    function extractEmailBody(source) {
+        try {
+            const parts = source.split("MIME-Version: 1.0");
+            if (parts.length > 1) {
+                let body = parts[1].trim();
+                const headerEnd = body.indexOf("\n\n");
+                if (headerEnd > -1) {
+                    body = body.substring(headerEnd).trim();
+                }
+                
+                const filterKeys = [
+                    'Content-Type', 'Content-Transfer-Encoding', 
+                    'Content-Disposition', 'Content-ID', 'Content-Description'
+                ];
+                
+                filterKeys.forEach(key => {
+                    const regex = new RegExp(`^${key}:.*?\\n`, 'gmi');
+                    body = body.replace(regex, '');
+                });
+                
+                return body;
+            }
+            return source;
+        } catch (e) {
+            console.error("Error extracting email body:", e);
+            return "Could not extract email body";
+        }
+    }
+
+    async function fetchISP(ip) {
         try {
             const response = await fetch(`https://ipapi.co/${ip}/json/`);
             const data = await response.json();
@@ -338,24 +430,14 @@ ${domainsText}`;
         }
     }
 
-    async function fetchISP(ip) {
-        return await getISP(ip);
-    }
-
     function resetFields() {
-        // Clear all form fields
         const form = document.querySelector('form');
         form.reset();
-        
-        // Specifically clear textareas
-        document.getElementById('header').value = '';
+        document.getElementById('header_text').value = '';
         document.getElementById('body').value = '';
         document.getElementById('domains').value = '';
-        
-        // Hide results div
+        document.getElementById('header_display').value = '';
         parseResultsDiv.style.display = 'none';
-        
-        // Clear file input
         fileInput.value = '';
     }
 </script>
