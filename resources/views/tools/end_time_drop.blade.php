@@ -54,19 +54,19 @@
                     <!-- Total Time -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="fw-bold text-success">Total Time:</span>
-                        <span class="badge bg-success fs-6" id="totalTime"></span>
+                        <span class="badge bg-success fs-6" id="totalTime" style="color:black !important;"></span>
                     </div>
                     
                     <!-- Email Calculation -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="fw-bold text-info">Email Calculation:</span>
-                        <span class="badge bg-info fs-6" id="emailResult"></span>
+                        <span class="badge bg-info fs-6" id="emailResult" style="color:black !important;"></span>
                     </div>
                     
                     <!-- All Data -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="fw-bold text-warning">All Data:</span>
-                        <span class="badge bg-warning text-dark fs-6" id="fractionResult"></span>
+                        <span class="badge bg-warning fs-6" id="fractionResult" style="color:black !important;"></span>
                     </div>
                     
                     <!-- Time Calculation -->

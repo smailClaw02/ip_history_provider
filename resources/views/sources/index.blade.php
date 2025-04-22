@@ -50,13 +50,13 @@
 
                         // Generate consistent color based on IP prefix
                         $hue = abs(crc32($ipPrefix)) % 160;
-                        $color = "hsl({$hue}, 100%, 70%)";
+                        $color = "hsl({$hue}, 100%, 75%)";
                     @endphp
                     <tr class="ip-row" data-ip-prefix="{{ $ipPrefix }}" data-similar-count="{{ $similarCount }}"
                         data-highlight-color="{{ $color }}" data-ip="{{ $source->ip }}">
                         <td>{{ $source->id }}</td>
                         <td class="text-center">
-                            <span class="ip-address text-center">{{ $source->ip }}</span>
+                            <span class="ip-address text-center text-center">{{ $source->ip }}</span>
                         </td>
                         <td class="text-center">
                             @if ($similarCount > 1)
