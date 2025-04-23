@@ -124,6 +124,7 @@
                         } else {
                             row.style.backgroundColor = '';
                             row.querySelector('.ip-address').style.backgroundColor = '';
+                            row.querySelector('.ip-address').style.color = "";
                         }
                     }
                 });
