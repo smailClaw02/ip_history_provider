@@ -13,33 +13,44 @@
             <form id="timeForm" class="mb-4">
                 <div class="row g-3">
                     <!-- Sleep Time (seconds) -->
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <label for="sleep" class="form-label fw-bold">Sleep Time (seconds)</label>
-                        <input type="number" class="form-control" id="sleep" value="60" min="1" step="1" required>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="sleep" value="60" min="1" required>
+                            <button type="button" class="btn btn-secondary" id="calcSleepBtn">
+                                <i class="fas fa-calculator"></i> Calculate Sleep
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- Loop Count -->
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <label for="loop" class="form-label fw-bold">Loop Count</label>
-                        <input type="number" class="form-control" id="loop" value="500" min="1" step="1" required>
+                        <input type="number" class="form-control" id="loop" value="500" min="1" required>
                     </div>
                     
                     <!-- IPs -->
                     <div class="col-md-3">
                         <label for="ips" class="form-label fw-bold">IPs</label>
-                        <input type="number" class="form-control" id="ips" value="1" min="1" step="1" required>
+                        <input type="number" class="form-control" id="ips" value="1" min="1" required>
                     </div>
                     
                     <!-- Fraction -->
                     <div class="col-md-3">
                         <label for="fraction" class="form-label fw-bold">Fraction</label>
-                        <input type="number" class="form-control" id="fraction" value="1" min="1" step="1">
+                        <input type="number" class="form-control" id="fraction" value="1" min="1">
                     </div>
-                    
-                    <!-- Hours -->
-                    <div class="col-md-6">
-                        <label for="hours" class="form-label fw-bold">Hours (for Email Calculation)</label>
-                        <input type="number" class="form-control" id="hours" value="1" min="0" step="0.5">
+ 
+                    <!-- emails/min -->
+                    <div class="col-md-3">
+                        <label for="emails_min" class="form-label fw-bold">Number emails (emails/min)</label>
+                        <input type="number" class="form-control" id="emails_min" value="1" min="1">
+                    </div>
+                   
+                    <!-- Minutes -->
+                    <div class="col-md-3">
+                        <label for="minutes" class="form-label fw-bold">Minutes (for Email Calculation)</label>
+                        <input type="number" class="form-control" id="minutes" value="15" min="1">
                     </div>
                 </div>
                 
@@ -86,6 +97,7 @@
             <div class="alert alert-info mt-4">
                 <i class="fas fa-info-circle me-2"></i>
                 Calculate total processing time and email sending rates based on your parameters.
+                <br>Enter either sleep time or emails per minute and click the corresponding calculate button.
             </div>
         </div>
     </div>
@@ -109,6 +121,25 @@
             document.getElementById("result_time").value = currentTime.toISOString().slice(0, 16);
         }
         
+        // Calculate sleep time based on emails per minute
+        function calculateSleepTime() {
+            const emailsPerMinute = parseFloat(document.getElementById('emails_min').value);
+            const fraction = parseFloat(document.getElementById('fraction').value) || 1;
+            const ips = parseFloat(document.getElementById('ips').value) || 1;
+            
+            if (emailsPerMinute <= 0 || fraction <= 0 || ips <= 0) {
+                alert('Please enter valid positive numbers for emails per minute, fraction, and IPs');
+                return;
+            }
+            
+            // Calculate sleep time: (60 seconds) / (emails per minute / (fraction * IPs))
+            const sleepTime = 60 / (emailsPerMinute / (fraction * ips));
+            document.getElementById('sleep').value = sleepTime;
+            
+            // Show a message about the calculation
+            // alert(`Calculated sleep time: ${sleepTime} seconds to achieve ${emailsPerMinute} emails/minute with ${ips} IP(s) and fraction ${fraction}`);
+        }
+        
         // Form submission handler
         document.getElementById('timeForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -117,8 +148,14 @@
             const sleepTime = parseFloat(document.getElementById('sleep').value) || 60;
             const loopCount = parseFloat(document.getElementById('loop').value) || 500;
             const fraction = parseFloat(document.getElementById('fraction').value) || 1;
-            const hours = parseFloat(document.getElementById('hours').value) || 1;
+            const minutes = parseFloat(document.getElementById('minutes').value) || 15;
             const ips = parseFloat(document.getElementById('ips').value) || 1;
+            const emailsPerMinute = (60 / sleepTime) * fraction * ips;
+            
+            // Update the emails/min field if it was empty or zero
+            if (!document.getElementById('emails_min').value || document.getElementById('emails_min').value == "0") {
+                document.getElementById('emails_min').value = emailsPerMinute;
+            }
             
             // Validate inputs
             if (sleepTime <= 0 || loopCount <= 0 || ips <= 0) {
@@ -132,16 +169,15 @@
             const minutesTotal = Math.floor((totalSeconds % 3600) / 60);
             const secondsTotal = Math.floor(totalSeconds % 60);
             
-            // Calculate email rates
-            const emailsPerMinute = (60 / sleepTime) * fraction * ips;
-            const totalEmails = emailsPerMinute * 60 * hours;
+            // Calculate email rates (now using minutes instead of hours)
+            const totalEmails = emailsPerMinute * minutes;
             
             // Display results
             document.getElementById('totalTime').textContent = 
                 `${hoursTotal}h ${minutesTotal}m ${secondsTotal}s`;
             
             document.getElementById('emailResult').textContent = 
-                `${totalEmails.toFixed(0)} emails in ${hours} hour(s) at ${emailsPerMinute}emails/minute`;
+                `${totalEmails.toFixed(0)} emails in ${minutes} minute(s) at ${emailsPerMinute} emails/minute`;
             
             document.getElementById('fractionResult').textContent = 
                 `Data Send: ${(loopCount * ips * fraction).toFixed(0)} → ${totalSeconds}s`;
@@ -152,6 +188,9 @@
             // Show results
             document.getElementById('resultBox').style.display = 'block';
         });
+        
+        // Add event listener for the calculate sleep button
+        document.getElementById('calcSleepBtn').addEventListener('click', calculateSleepTime);
         
         // Initialize
         updateTime();

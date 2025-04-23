@@ -29,8 +29,11 @@
                             @endif
                         </form>
                     </th>
-                    <th><input class="form-check-input" type="checkbox" id="highlightSimilar">
-                        <label class="form-check-label" for="highlightSimilar">Show Similar</label>
+                    <th>
+                        <div class="">
+                            <input class="form-check-input" type="checkbox" id="highlightSimilar">
+                            <label class="form-check-label" for="highlightSimilar">Show Similar</label>
+                        </div>
                     </th>
                     <th>VMTA</th>
                     <th>From</th>
@@ -49,20 +52,20 @@
                         $similarCount = $ipGroups[$ipPrefix] ?? 1;
 
                         // Generate consistent color based on IP prefix
-                        $hue = abs(crc32($ipPrefix)) % 160;
+                        $hue = abs(crc32($ipPrefix)) % 1000;
                         $color = "hsl({$hue}, 100%, 75%)";
                     @endphp
                     <tr class="ip-row" data-ip-prefix="{{ $ipPrefix }}" data-similar-count="{{ $similarCount }}"
                         data-highlight-color="{{ $color }}" data-ip="{{ $source->ip }}">
                         <td>{{ $source->id }}</td>
                         <td class="text-center">
-                            <span class="ip-address text-center text-center">{{ $source->ip }}</span>
+                            <span class="ip-address text-center">{{ $source->ip }}</span>
                         </td>
                         <td class="text-center">
                             @if ($similarCount > 1)
-                                <span class="badge bg-success">{{ $similarCount }}</span>
+                                <span class="badge bg-primary">{{ $similarCount }}</span>
                             @elseif ($similarCount == 1)
-                                <span class="badge bg-primary">1</span>
+                                <span class="badge bg-secondary">1</span>
                             @endif
                         </td>
                         <td>{{ $source->vmta }}</td>
@@ -117,6 +120,7 @@
                             const color = row.dataset.highlightColor;
                             row.style.backgroundColor = color;
                             row.querySelector('.ip-address').style.backgroundColor = color;
+                            row.querySelector('.ip-address').style.color = "black";
                         } else {
                             row.style.backgroundColor = '';
                             row.querySelector('.ip-address').style.backgroundColor = '';
