@@ -3,7 +3,7 @@
 @section('title', 'Time Calculator')
 
 @section('content')
-<div class="py-4 m-auto" style="width: 98%">
+<div class="py-4 m-auto" style="width: 90%">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
             <h2 class="mb-0 text-center">Time Calculator</h2>

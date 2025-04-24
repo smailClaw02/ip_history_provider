@@ -3,7 +3,7 @@
 @section('title', 'Random')
 
 @section('content')
-    <div class="py-4 m-auto" style="width: 98%">
+    <div class="container py-4 m-auto">
         <div class="card shadow">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <h2 class="mb-0">Random</h2>
