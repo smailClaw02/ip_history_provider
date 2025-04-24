@@ -3,12 +3,13 @@
 @section('content')
     <div class="py-4 m-auto" style="width: 98%">
         <div class="row justify-content-center">
-            <div class="col-md-">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header bg-primary text-white">Create New Email Source</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('emails.store') }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('sources.store') }}" enctype="multipart/form-data"
+                            id="emailSourceForm">
                             @csrf
 
                             <!-- Header Textarea and File Upload -->
@@ -39,9 +40,17 @@
                             </div>
 
                             <!-- Parsed Results Display -->
-                            <div class="alert alert-info mb-4" id="parseResults" style="display:none;">
-                                <h5 class="alert-heading">Parsed Results</h5>
-                                <pre id="resultDisplay" class="mb-0"></pre>
+                            <div class="row justify-content-around">
+                            	<div class="col-md-5 alert alert-info mb-4" id="parseResults" style="display:none;">
+                                	<h5 class="alert-heading">Parsed Results</h5>
+                                	<pre id="resultDisplay" class="mb-0"></pre>
+                            	</div>
+
+                            	<!-- Parsed Results Display -->
+                            	<div class="col-md-5 alert alert-warning mb-4" id="parseResults" style="display:none;">
+                                	<h5 class="alert-heading">Parsed DKIM-Signature:</h5>
+                                	<pre id="resultDisplayH" class="mb-0"></pre>
+                            	</div>
                             </div>
 
                             <!-- Form Fields in Two Columns -->
@@ -50,7 +59,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="ip" class="form-label">IP</label>
-                                        <input type="text" class="form-control" id="ip" name="ip">
+                                        <input type="text" class="form-control" id="ip" name="ip" required>
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -65,17 +74,20 @@
 
                                     <div class="form-group mb-3">
                                         <label for="from" class="form-label">From</label>
-                                        <input type="text" class="form-control" id="from" name="from">
+                                        <input type="text" class="form-control" id="from" name="from" required>
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label for="return_path" class="form-label">Return Path</label>
-                                        <input type="text" class="form-control" id="return_path" name="return_path">
+                                        <input type="text" class="form-control" id="return_path" name="return_path"
+                                            required>
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label for="domains" class="form-label">Domains</label>
-                                        <textarea class="form-control" id="domains" name="domains" rows="10"></textarea>
+                                        <textarea class="form-control" id="domains" name="domains" rows="3" required></textarea>
+                                        <small class="text-muted">Automatically formatted as JSON array. Example:
+                                            ["example.com","test.org"]</small>
                                     </div>
                                 </div>
 
@@ -83,12 +95,14 @@
                                 <div class="col-md-6 row">
                                     <div class="form-group mb-3">
                                         <label for="date" class="form-label">Date</label>
-                                        <input type="text" class="form-control" id="date" name="date">
+                                        <input type="datetime-local" class="form-control" id="date" name="date"
+                                            required>
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="email" name="email">
+                                        <input type="text" class="form-control" id="email" name="email"
+                                            required>
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -102,11 +116,10 @@
                                             name="redirect_link">
                                     </div>
 
-
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="spf" class="form-label">SPF</label>
-                                            <select class="form-select" id="spf" name="spf">
+                                            <select class="form-select" id="spf" name="spf" required>
                                                 <option value="pass">pass</option>
                                                 <option value="fail">fail</option>
                                                 <option value="softfail">softfail</option>
@@ -121,7 +134,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="dkim" class="form-label">DKIM</label>
-                                            <select class="form-select" id="dkim" name="dkim">
+                                            <select class="form-select" id="dkim" name="dkim" required>
                                                 <option value="pass">pass</option>
                                                 <option value="fail">fail</option>
                                                 <option value="policy">policy</option>
@@ -135,7 +148,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="dmarc" class="form-label">DMARC</label>
-                                            <select class="form-select" id="dmarc" name="dmarc">
+                                            <select class="form-select" id="dmarc" name="dmarc" required>
                                                 <option value="pass">pass</option>
                                                 <option value="fail">fail</option>
                                                 <option value="permerror">permerror</option>
@@ -149,7 +162,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="message_path" class="form-label">Message Path</label>
-                                            <select class="form-select" id="message_path" name="message_path">
+                                            <select class="form-select" id="message_path" name="message_path" required>
                                                 <option value="inbox">Inbox</option>
                                                 <option value="spam">Spam</option>
                                             </select>
@@ -162,14 +175,14 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="header_display" class="form-label">Email Header</label>
-                                            <textarea class="form-control" id="header_display" name="header" rows="10"></textarea>
+                                            <textarea class="form-control" id="header_display" name="header" rows="10" required></textarea>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="body" class="form-label">Email Body</label>
-                                            <textarea class="form-control" id="body" name="body" rows="10"></textarea>
+                                            <textarea class="form-control" id="body" name="body" rows="10" required></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -188,9 +201,17 @@
     </div>
 
     <script>
+        function showDate(date) {
+            const dates = new Date(date);
+            // Format to YYYY-MM-DDTHH:MM
+            const formatted = dates.toISOString().slice(0, 16);
+            return formatted;
+        }
+
         // DOM Elements
         const headerTextarea = document.getElementById('header_text');
         const fileInput = document.getElementById('email_file');
+        const form = document.getElementById('emailSourceForm');
 
         // File Upload Handler
         fileInput.addEventListener('change', function(e) {
@@ -200,6 +221,7 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 headerTextarea.value = e.target.result;
+                parseHeaders(); // Auto-parse after upload
             };
             reader.readAsText(file);
         });
@@ -292,7 +314,9 @@
             const match = input.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
             return match ? match[0] : 'not found email';
         }
+
         // Main Processing Function
+        let messagePathValue = "";
         async function parseHeaders() {
             const headerText = document.getElementById("header_text").value;
             if (!headerText.trim()) {
@@ -301,7 +325,8 @@
             }
 
             // Show loading state
-            document.getElementById("resultDisplay").textContent = "Parsing headers...";
+            document.getElementById("resultDisplay").textContent = "Parsing History...";
+            document.getElementById("resultDisplayH").textContent = "Parsing DKIM-Signature:...";
             document.getElementById("parseResults").style.display = 'block';
 
             // Process header (keep this for internal processing)
@@ -410,7 +435,7 @@
             document.getElementById('ip').value = authResults.client_ip || '';
             document.getElementById('provider_ip').value = providerIp;
             document.getElementById('vmta').value = authResults.helo || '';
-            document.getElementById('date').value = authResults.date || '';
+            document.getElementById('date').value = showDate(authResults.date) || '';
             document.getElementById('email').value = extractEmail_01(authResults.email) || '';
             document.getElementById('spf').value = authResults.spf?.toLowerCase() || 'pass';
             document.getElementById('dkim').value = authResults.dkim?.toLowerCase() || 'pass';
@@ -442,14 +467,10 @@
 
             // Display domain results
             if (domainResults.length > 0) {
-                const formattedResults = domainResults.map(d =>
-                    `${d.domain}`
-                ).join('\n');
-                document.getElementById("domains").value = formattedResults;
+                document.getElementById("domains").value = JSON.stringify(domainResults.map(d => d.domain));
             } else {
-                document.getElementById("domains").value = "No valid domains found";
+                document.getElementById("domains").value = JSON.stringify([]);
             }
-
 
             // Display results in the parseResults div
             const resultText = `IP: ${authResults.client_ip || 'N/A'}
@@ -460,7 +481,7 @@ DKIM: ${authResults.dkim || 'N/A'}
 DMARC: ${authResults.dmarc || 'N/A'}
 Date: ${authResults.date || 'N/A'}
 Email: ${extractEmail_01(authResults.email) || 'N/A'}
-Message Path: ${authResults.message_path || 'N/A'}`;
+Message Path: ${messagePathValue || 'N/A'}`;
 
             document.getElementById("resultDisplay").textContent = resultText;
         }
@@ -487,6 +508,7 @@ Message Path: ${authResults.message_path || 'N/A'}`;
             };
 
             const sclValue = sclMatch ? sclMatch[1] : null;
+            messagePathValue = sclValue in sclMapping ? `${sclMatch[1]} --> ${sclMapping[sclValue]}` : 'inbox';
             const messagePath = sclValue in sclMapping ? sclMapping[sclValue] : 'inbox';
 
             return {
@@ -519,7 +541,6 @@ Message Path: ${authResults.message_path || 'N/A'}`;
         // DNS Record Lookup (placeholder - you'll need to implement this)
         async function getDNSRecord(domain, type) {
             // This is a placeholder - you'll need to implement actual DNS lookup
-            // You might use a third-party API or a library like dns.promises
             console.log(`Looking up ${type} record for ${domain}`);
             return [];
         }

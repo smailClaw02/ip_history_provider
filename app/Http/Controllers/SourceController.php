@@ -48,7 +48,7 @@ class SourceController extends Controller
             'header' => 'required|string',
             'body' => 'required|string',
         ]);
-
+	dd($validated);
         Source::create($validated);
 
         return redirect()->route('sources.index')
