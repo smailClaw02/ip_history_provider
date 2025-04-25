@@ -7,7 +7,7 @@
         <div class="border border-secondary border-2 rounded-3">
             <a href="{{ route('sources.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i>
-            </a> <b class="fs-5 p-2 ">Source #{{ $source->id }}</b>
+            </a> <b class="fs-5 p-2">Source #{{ $source->id }}</b>
         </div>
         
         <div class="action-btns">
@@ -40,19 +40,11 @@
                 </div>
                 <div class="col-md-6">
                     <p class="copyable" data-value="{{ $source->email }}"><strong>Email:</strong> {{ $source->email }}</p>
-                    <p class="copyable" data-value="{{ $source->date }}"><strong>Date:</strong> {{ $source->date }}</p>
+                    <p class="copyable" data-value="{{ $source->date }}"><strong>Date:</strong> {{ $source->date->format('Y-m-d H:i') }}</p>
+                    <p class="copyable" data-value="{{ $source->colonne }}"><strong>Colonne:</strong> {{ $source->colonne }}</p>
                     <p class="copyable" data-value="{{ $source->redirect_link }}"><strong>Redirect Link:</strong> 
-                        <a href="#">{{ $source->redirect_link }}</a>
+                        <a href="{{ $source->redirect_link }}" target="_blank">{{ $source->redirect_link }}</a>
                     </p>
-                    <div class="mt-3">
-                        <strong>Domains:</strong>
-                        <textarea class="form-control domains-textarea" rows="5" readonly>
-@foreach(json_decode($source->domains) as $domain)
-{{ $domain }}
-@endforeach
-                        </textarea>
-                        <button class="btn btn-sm btn-secondary mt-2 copy-domains">Copy Domains</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -87,8 +79,8 @@
                 </div>
                 <div class="col-md-3">
                     <p><strong>DMARC:</strong> 
-                        <span class="badge fs-6 bg-{{ $source->dmark === 'pass' ? 'success' : 'danger' }}">
-                            {{ strtoupper($source->dmark) }}
+                        <span class="badge fs-6 bg-{{ $source->dmarc === 'pass' ? 'success' : 'danger' }}">
+                            {{ strtoupper($source->dmarc) }}
                         </span>
                     </p>
                 </div>
@@ -122,7 +114,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Copy individual fields on click
     document.querySelectorAll('.copyable').forEach(element => {
         element.addEventListener('click', function() {
             const value = this.getAttribute('data-value');
@@ -131,21 +122,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Copy domains
-    document.querySelector('.copy-domains').addEventListener('click', function() {
-        const textarea = document.querySelector('.domains-textarea');
-        copyToClipboard(textarea.value);
-        showCopiedTooltip(this);
-    });
-
-    // Copy header
     document.querySelector('.copy-header').addEventListener('click', function() {
         const textarea = document.querySelector('.email-header');
         copyToClipboard(textarea.value);
         showCopiedTooltip(this);
     });
 
-    // Copy body
     document.querySelector('.copy-body').addEventListener('click', function() {
         const textarea = document.querySelector('.email-body');
         copyToClipboard(textarea.value);
@@ -178,16 +160,9 @@ document.addEventListener('DOMContentLoaded', function() {
     border-radius: 3px;
     transition: background-color 0.2s;
 }
-
-.copyable:hover {
-    background-color: #f0f0f0;
-}
-
-.copyable:active {
-    background-color: #e0e0e0;
-}
-
-.email-header, .email-body, .domains-textarea {
+.copyable:hover { background-color: #f0f0f0; }
+.copyable:active { background-color: #e0e0e0; }
+.email-header, .email-body {
     font-family: monospace;
     white-space: pre;
     overflow-x: auto;

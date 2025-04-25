@@ -9,8 +9,6 @@ class Source extends Model
 {
     use HasFactory;
 
-    protected $table = 'sources';
-
     protected $fillable = [
         'ip',
         'provider_ip',
@@ -19,18 +17,17 @@ class Source extends Model
         'return_path',
         'spf',
         'dkim',
-        'dmark',
+        'dmarc',
         'date',
         'email',
         'message_path',
         'colonne',
         'redirect_link',
         'header',
-        'body',
-        'domains'
+        'body'
     ];
 
     protected $casts = [
-        'domains' => 'array',
+        'date' => 'datetime',
     ];
 }

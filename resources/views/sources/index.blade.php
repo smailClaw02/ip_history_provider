@@ -46,12 +46,9 @@
             <tbody>
                 @foreach ($sources as $source)
                     @php
-                        // Get first 3 octets of IP
                         $ipParts = explode('.', $source->ip);
                         $ipPrefix = count($ipParts) >= 3 ? implode('.', array_slice($ipParts, 0, 3)) : $source->ip;
                         $similarCount = $ipGroups[$ipPrefix] ?? 1;
-
-                        // Generate consistent color based on IP prefix
                         $hue = abs(crc32($ipPrefix)) % 1000;
                         $color = "hsl({$hue}, 100%, 75%)";
                     @endphp
@@ -64,7 +61,7 @@
                         <td class="text-center">
                             @if ($similarCount > 1)
                                 <span class="badge bg-primary">{{ $similarCount }}</span>
-                            @elseif ($similarCount == 1)
+                            @else
                                 <span class="badge bg-secondary">1</span>
                             @endif
                         </td>
@@ -76,13 +73,12 @@
                                 {{ $source->message_path }}
                             </span>
                         </td>
-                        <td>{{ $source->date }}</td>
+                        <td>{{ $source->date->format('Y-m-d H:i') }}</td>
                         <td class="text-end action-btns">
                             <a href="{{ route('sources.show', $source->id) }}" class="btn btn-sm btn-info" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('sources.edit', $source->id) }}" class="btn btn-sm btn-warning"
-                                title="Edit">
+                            <a href="{{ route('sources.edit', $source->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <form action="{{ route('sources.destroy', $source->id) }}" method="POST" class="d-inline">
@@ -98,7 +94,7 @@
                 @endforeach
             </tbody>
         </table>
-        {{-- Pagination Links --}}
+        
         <div class="d-flex justify-content-end my-4">
             <nav aria-label="Pagination navigation" class="pagination-dark">
                 <ul class="pagination">
@@ -130,10 +126,7 @@
                 });
             }
 
-            // Initialize
             applyHighlighting(toggle.checked);
-
-            // Toggle event
             toggle.addEventListener('change', function() {
                 applyHighlighting(this.checked);
             });

@@ -40,17 +40,9 @@
                             </div>
 
                             <!-- Parsed Results Display -->
-                            <div class="row justify-content-around">
-                            	<div class="col-md-5 alert alert-info mb-4" id="parseResults" style="display:none;">
-                                	<h5 class="alert-heading">Parsed Results</h5>
-                                	<pre id="resultDisplay" class="mb-0"></pre>
-                            	</div>
-
-                            	<!-- Parsed Results Display -->
-                            	<div class="col-md-5 alert alert-warning mb-4" id="parseResults" style="display:none;">
-                                	<h5 class="alert-heading">Parsed DKIM-Signature:</h5>
-                                	<pre id="resultDisplayH" class="mb-0"></pre>
-                            	</div>
+                            <div class="alert alert-info mb-4" id="parseResults" style="display:none;">
+                                <h5 class="alert-heading">Parsed Results</h5>
+                                <pre id="resultDisplay" class="mb-0"></pre>
                             </div>
 
                             <!-- Form Fields in Two Columns -->
@@ -82,13 +74,6 @@
                                         <input type="text" class="form-control" id="return_path" name="return_path"
                                             required>
                                     </div>
-
-                                    <div class="form-group mb-3">
-                                        <label for="domains" class="form-label">Domains</label>
-                                        <textarea class="form-control" id="domains" name="domains" rows="3" required></textarea>
-                                        <small class="text-muted">Automatically formatted as JSON array. Example:
-                                            ["example.com","test.org"]</small>
-                                    </div>
                                 </div>
 
                                 <!-- Right Column -->
@@ -101,8 +86,7 @@
 
                                     <div class="form-group mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="email" name="email"
-                                            required>
+                                        <input type="text" class="form-control" id="email" name="email" required>
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -203,7 +187,6 @@
     <script>
         function showDate(date) {
             const dates = new Date(date);
-            // Format to YYYY-MM-DDTHH:MM
             const formatted = dates.toISOString().slice(0, 16);
             return formatted;
         }
@@ -211,7 +194,6 @@
         // DOM Elements
         const headerTextarea = document.getElementById('header_text');
         const fileInput = document.getElementById('email_file');
-        const form = document.getElementById('emailSourceForm');
 
         // File Upload Handler
         fileInput.addEventListener('change', function(e) {
@@ -221,29 +203,10 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 headerTextarea.value = e.target.result;
-                parseHeaders(); // Auto-parse after upload
+                parseHeaders();
             };
             reader.readAsText(file);
         });
-
-        // Known TLDs for domain validation
-        const knownTlds = ["com", "org", "info", "edu", "gov", "net", "co", "io", "uk", "jp", "au", "ca", "de", "fr", "it",
-            "es", "cn", "in", "br", "ru", "nl", "se", "dk", "no", "fi", "ch", "at", "be", "pl", "ie", "nz", "sg", "kr",
-            "tw", "hk", "my", "za", "il", "mx", "tr", "id", "th", "vn", "ph", "gr", "cz", "hu", "pt", "ro", "sk", "si",
-            "bg", "hr", "lt", "lv", "ee", "is", "li", "lu", "mc", "mt", "cy", "sm", "va", "ad", "ae", "af", "al", "am",
-            "ao", "ar", "az", "ba", "bd", "bf", "bh", "bi", "bj", "bn", "bo", "bw", "by", "bz", "cd", "cf", "cg", "cl",
-            "cm", "co", "cr", "cu", "cv", "cy", "cz", "dj", "dk", "dm", "do", "dz", "ec", "ee", "eg", "er", "et", "fj",
-            "fm", "ga", "ge", "gg", "gh", "gi", "gl", "gm", "gn", "gp", "gq", "gr", "gt", "gu", "gw", "gy", "hk", "hn",
-            "hr", "ht", "hu", "id", "ie", "il", "in", "iq", "ir", "is", "it", "je", "jm", "jo", "jp", "ke", "kg", "kh",
-            "ki", "km", "kn", "kp", "kr", "kw", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly",
-            "ma", "mc", "md", "me", "mg", "mh", "mk", "ml", "mm", "mn", "mo", "mp", "mq", "mr", "ms", "mt", "mu", "mv",
-            "mw", "mx", "my", "mz", "na", "nc", "ne", "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "pa",
-            "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "ps", "pt", "pw", "py", "qa", "re", "ro", "rs", "ru",
-            "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sk", "sl", "sm", "sn", "so", "sr", "ss", "st", "sv",
-            "sx", "sy", "sz", "tc", "td", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tr", "tt", "tv", "tw", "tz",
-            "ua", "ug", "uk", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wf", "ws", "ye", "yt", "za",
-            "zm", "zw"
-        ];
 
         // ISP Lookup Function
         async function fetchISP(ip) {
@@ -258,59 +221,7 @@
             }
         }
 
-        // Domain Lookup Function
-        async function lookupDomains(domainsArray) {
-            if (!domainsArray || domainsArray.length === 0) return [];
-
-            const results = [];
-
-            for (const domain of domainsArray) {
-                try {
-                    const cleanDomain = domain.replace(/^www\./, '');
-                    const [spfRecords, dmarcRecords] = await Promise.all([
-                        getDNSRecord(cleanDomain, "TXT"),
-                        getDNSRecord(`_dmarc.${cleanDomain}`, "TXT")
-                    ]);
-
-                    const spf = spfRecords.filter(r => r.includes("v=spf1")).join("\n") || "No SPF record";
-                    const dmarc = dmarcRecords.filter(r => r.includes("v=DMARC1")).join("\n") || "No DMARC record";
-
-                    results.push({
-                        domain: cleanDomain,
-                        spf,
-                        dmarc
-                    });
-                } catch (error) {
-                    console.error(`Error processing ${domain}:`, error);
-                    results.push({
-                        domain,
-                        spf: "Lookup failed",
-                        dmarc: "Lookup failed"
-                    });
-                }
-            }
-
-            return results;
-        }
-
-        // Helper function to extract domains from text
-        function extractDomainsFromText(text) {
-            const domainRegex = /\b(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+\.(?:[a-zA-Z0-9-]+\.)*[a-zA-Z]{2,})\b/g;
-            const domains = new Set();
-            let match;
-
-            while ((match = domainRegex.exec(text)) !== null) {
-                const domain = match[1].toLowerCase();
-                const tld = domain.split('.').pop();
-                if (knownTlds.includes(tld)) {
-                    domains.add(domain);
-                }
-            }
-
-            return Array.from(domains);
-        }
-
-        function extractEmail_01(input) {
+        function extractEmail(input) {
             const match = input.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
             return match ? match[0] : 'not found email';
         }
@@ -325,19 +236,16 @@
             }
 
             // Show loading state
-            document.getElementById("resultDisplay").textContent = "Parsing History...";
-            document.getElementById("resultDisplayH").textContent = "Parsing DKIM-Signature:...";
+            document.getElementById("resultDisplay").textContent = "Parsing headers...";
             document.getElementById("parseResults").style.display = 'block';
 
             // Process header (keep this for internal processing)
-            let result = headerText
+            const header_find = extractEmailBody(headerText)[0]
+
+            let result = header_find
                 .replace(/Return-Path:\s*(.+)/i, (_, email) => `Return-Path: ${email}`)
                 .replace(/Message-Id:\s*(<.+)/i, (_, email) => `Message-Id: ${email}`)
                 .replace(/Message-ID:\s*(<.+)/i, (_, email) => `Message-ID: ${email}`)
-                .replace(/Content-Type:\s*(<.+)\n(<.+)/i, (_, email_01, email_02) =>
-                    `Content-Type: ${email_01} ${email_02}`)
-                .replace(/Content-Type: (.+)\s*(boundary=.*)/i, (_, name, email) => email ?
-                    `Content-Type: ${name} ${email}` : `Content-Type: ${name}`)
                 .replace(/\n\s+/g, " ")
                 .replace(/(Received: from .+?)\s+(by .+?)\s+(with .+?)\s+(id .+?)\s+(for .+?);\s+(.+)/gi,
                     (_, part1, part2, part3, part4, part5, part6) =>
@@ -360,40 +268,17 @@
                 });
 
             const headersArray = parseHeaders(result);
-            const filterAndSortHeaders = (headers, keys) =>
-                headers.filter(header => keys.includes(header.key))
+            const filteredAndSortedHeaders = headersArray
+                .filter(header => filterKeys.includes(header.key))
                 .sort((a, b) => a.key.localeCompare(b.key));
 
-            const filteredAndSortedHeaders = filterAndSortHeaders(headersArray, filterKeys);
             const filteredData = filteredAndSortedHeaders.filter(item =>
                 item.key === "Received" && item.value.includes("from localhost") || item.key !== "Received"
             );
 
-            const rankById = (data) => data.sort((a, b) => a.id - b.id);
-            const rankedData = rankById(filteredData);
+            const rankedData = filteredData.sort((a, b) => a.id - b.id);
 
-            let return_path = "";
-            let domain_from = "";
-            let domain_Sender = "";
-            let domain_ReturnPath = "";
-            let domain_MessageId = "";
-
-            function extractDomainFromEmail(email) {
-                const match = email.match(/@([^>]+)/);
-                return match ? match[1] : null;
-            }
-
-            // Extract original information
-            const returnPathItem = rankedData.find(item => item.key === "Return-Path");
-            if (returnPathItem) {
-                return_path = returnPathItem.value;
-                domain_ReturnPath = extractDomainFromEmail(returnPathItem.value);
-                document.getElementById("return_path").value = return_path;
-            }
-
-            const fromItem = rankedData.find(item => item.key === "From");
-
-            function extractEmail(input) {
+            function extractEmailInfo(input) {
                 const match = input.match(/(.*)<([^>]+)>/);
                 const name = match ? match[1].trim() : null;
                 const email = match ? match[2].trim() : null;
@@ -402,23 +287,23 @@
                     email
                 };
             }
+
+            // Extract From and Return-Path
+            const returnPathItem = rankedData.find(item => item.key === "Return-Path");
+            if (returnPathItem) {
+                document.getElementById("return_path").value = returnPathItem.value;
+            }
+
+            const fromItem = rankedData.find(item => item.key === "From");
             if (fromItem) {
-                domain_from = extractDomainFromEmail(extractEmail(fromItem.value).email);
-                document.getElementById("from").value = extractEmail(fromItem.value).email;
-                document.getElementById("colonne").value = extractEmail(fromItem.value).name;
+                const fromInfo = extractEmailInfo(fromItem.value);
+                document.getElementById("from").value = fromInfo.email || fromItem.value;
+                if (fromInfo.name) {
+                    document.getElementById("colonne").value = fromInfo.name;
+                }
             }
 
-            const senderItem = rankedData.find(item => item.key === "Sender" || item.key === "sender");
-            if (senderItem) {
-                domain_Sender = extractDomainFromEmail(senderItem.value);
-            }
-
-            const messageIdItem = rankedData.find(item => item.key === "Message-Id" || item.key === "Message-ID");
-            if (messageIdItem) {
-                domain_MessageId = extractDomainFromEmail(messageIdItem.value);
-            }
-
-            // Display parsed header (keep this for the header_display textarea)
+            // Display parsed header
             const origin_header = rankedData.map(header => `${header.key}: ${header.value}`).join('\n');
             document.getElementById("header_display").value = origin_header;
 
@@ -436,43 +321,17 @@
             document.getElementById('provider_ip').value = providerIp;
             document.getElementById('vmta').value = authResults.helo || '';
             document.getElementById('date').value = showDate(authResults.date) || '';
-            document.getElementById('email').value = extractEmail_01(authResults.email) || '';
+            document.getElementById('email').value = extractEmail(authResults.email) || '';
             document.getElementById('spf').value = authResults.spf?.toLowerCase() || 'pass';
             document.getElementById('dkim').value = authResults.dkim?.toLowerCase() || 'pass';
             document.getElementById('dmarc').value = authResults.dmarc?.toLowerCase() || 'pass';
             document.getElementById('message_path').value = authResults.message_path || 'inbox';
 
             // Extract email body
-            const emailBody = extractEmailBody(headerText);
+            const emailBody = extractEmailBody(headerText)[1];
             document.getElementById('body').value = emailBody || '';
 
-            // Extract domains from body and perform lookups
-            const domainsFound = extractDomainsFromText(emailBody);
-            let domainResults = [];
-
-            if (domainsFound.length > 0) {
-                domainResults = await lookupDomains(domainsFound);
-            } else {
-                // Try to extract any domain from the header as fallback
-                const fallbackDomains = [];
-                if (domain_from) fallbackDomains.push(domain_from);
-                if (domain_Sender) fallbackDomains.push(domain_Sender);
-                if (domain_ReturnPath) fallbackDomains.push(domain_ReturnPath);
-                if (domain_MessageId) fallbackDomains.push(domain_MessageId);
-
-                if (fallbackDomains.length > 0) {
-                    domainResults = await lookupDomains(fallbackDomains);
-                }
-            }
-
-            // Display domain results
-            if (domainResults.length > 0) {
-                document.getElementById("domains").value = JSON.stringify(domainResults.map(d => d.domain));
-            } else {
-                document.getElementById("domains").value = JSON.stringify([]);
-            }
-
-            // Display results in the parseResults div
+            // Display results
             const resultText = `IP: ${authResults.client_ip || 'N/A'}
 Provider: ${providerIp}
 VMTA: ${authResults.helo || 'N/A'}
@@ -480,7 +339,7 @@ SPF: ${authResults.spf || 'N/A'}
 DKIM: ${authResults.dkim || 'N/A'}
 DMARC: ${authResults.dmarc || 'N/A'}
 Date: ${authResults.date || 'N/A'}
-Email: ${extractEmail_01(authResults.email) || 'N/A'}
+Email: ${extractEmail(authResults.email) || 'N/A'}
 Message Path: ${messagePathValue || 'N/A'}`;
 
             document.getElementById("resultDisplay").textContent = resultText;
@@ -504,7 +363,7 @@ Message Path: ${messagePathValue || 'N/A'}`;
                 6: "spam",
                 7: "spam",
                 8: "spam",
-                9: "spam",
+                9: "spam"
             };
 
             const sclValue = sclMatch ? sclMatch[1] : null;
@@ -512,14 +371,13 @@ Message Path: ${messagePathValue || 'N/A'}`;
             const messagePath = sclValue in sclMapping ? sclMapping[sclValue] : 'inbox';
 
             return {
-                spf: authResultsMatch ? authResultsMatch[1] : null,
-                dkim: authResultsMatch ? authResultsMatch[2] : null,
-                dmarc: authResultsMatch ? authResultsMatch[3] : null,
-                client_ip: clientIpMatch ? clientIpMatch[1] : null,
-                provider_ip: clientIpMatch ? clientIpMatch[1] : null, // Same as client_ip for now
-                helo: heloMatch ? heloMatch[1] : null,
-                date: dateMatch ? dateMatch[1] : null,
-                email: toMatch ? toMatch[1] : null,
+                spf: authResultsMatch?.[1],
+                dkim: authResultsMatch?.[2],
+                dmarc: authResultsMatch?.[3],
+                client_ip: clientIpMatch?.[1],
+                helo: heloMatch?.[1],
+                date: dateMatch?.[1],
+                email: toMatch?.[1],
                 message_path: messagePath,
             };
         }
@@ -527,9 +385,14 @@ Message Path: ${messagePathValue || 'N/A'}`;
         function extractEmailBody(source) {
             try {
                 const parts = source.split("MIME-Version: 1.0");
+
                 if (parts.length > 1) {
-                    let body = parts[1].trim();
-                    return body;
+                    const head = parts[0].trim() + "\nMIME-Version: 1.0";
+                    const body = parts.slice(1).join("MIME-Version: 1.0")
+                        .trim(); // Join the rest, in case there are multiple
+                    //  console.log(head);
+
+                    return [head, body];
                 }
                 return source;
             } catch (e) {
@@ -538,19 +401,11 @@ Message Path: ${messagePathValue || 'N/A'}`;
             }
         }
 
-        // DNS Record Lookup (placeholder - you'll need to implement this)
-        async function getDNSRecord(domain, type) {
-            // This is a placeholder - you'll need to implement actual DNS lookup
-            console.log(`Looking up ${type} record for ${domain}`);
-            return [];
-        }
-
         function resetFields() {
             document.getElementById('header_text').value = '';
             document.getElementById('email_file').value = '';
             document.getElementById('header_display').value = '';
             document.getElementById('parseResults').style.display = 'none';
-            document.getElementById('domains').value = '';
             document.getElementById('return_path').value = '';
             document.getElementById('ip').value = '';
             document.getElementById('provider_ip').value = '';
@@ -596,11 +451,6 @@ Message Path: ${messagePathValue || 'N/A'}`;
         .btn-success {
             background-color: #198754;
             border-color: #198754;
-        }
-
-        .btn-info {
-            background-color: #0dcaf0;
-            border-color: #0dcaf0;
         }
     </style>
 @endsection

@@ -25,21 +25,56 @@
                             <input type="text" class="form-control" id="provider_ip" name="provider_ip" 
                                    value="{{ old('provider_ip', $source->provider_ip) }}">
                         </div>
+
+                        <div class="mb-3">
+                            <label for="vmta" class="form-label">VMTA</label>
+                            <input type="text" class="form-control" id="vmta" name="vmta" 
+                                   value="{{ old('vmta', $source->vmta) }}">
+                        </div>
                     </div>
                     
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="from" class="form-label">From Email</label>
-                            <input type="email" class="form-control" id="from" name="from" 
+                            <input type="text" class="form-control" id="from" name="from" 
                                    value="{{ old('from', $source->from) }}" required>
                         </div>
                         
                         <div class="mb-3">
+                            <label for="return_path" class="form-label">Return Path</label>
+                            <input type="text" class="form-control" id="return_path" name="return_path" 
+                                   value="{{ old('return_path', $source->return_path) }}" required>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="email" class="form-label">Recipient Email</label>
-                            <input type="email" class="form-control" id="email" name="email" 
-                                   value="{{ old('email', $source->email) }}">
+                            <input type="text" class="form-control" id="email" name="email" 
+                                   value="{{ old('email', $source->email) }}" required>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="datetime-local" class="form-control" id="date" name="date" 
+                                   value="{{ old('date', $source->date->format('Y-m-d\TH:i')) }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="colonne" class="form-label">Colonne</label>
+                            <input type="text" class="form-control" id="colonne" name="colonne" 
+                                   value="{{ old('colonne', $source->colonne) }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="redirect_link" class="form-label">Redirect Link</label>
+                    <input type="text" class="form-control" id="redirect_link" name="redirect_link" 
+                           value="{{ old('redirect_link', $source->redirect_link) }}">
                 </div>
             </div>
         </div>
@@ -76,16 +111,24 @@
                     
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="dmark" class="form-label">DMARC Result</label>
-                            <select class="form-select" id="dmark" name="dmark" required>
-                                @foreach(['pass', 'fail', 'none', 'permerror', 'temperror'] as $option)
-                                    <option value="{{ $option }}" {{ $source->dmark == $option ? 'selected' : '' }}>
+                            <label for="dmarc" class="form-label">DMARC Result</label>
+                            <select class="form-select" id="dmarc" name="dmarc" required>
+                                @foreach(['pass', 'fail', 'none', 'permerror', 'temperror', 'bestguesspass'] as $option)
+                                    <option value="{{ $option }}" {{ $source->dmarc == $option ? 'selected' : '' }}>
                                         {{ ucfirst($option) }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="message_path" class="form-label">Message Path</label>
+                    <select class="form-select" id="message_path" name="message_path" required>
+                        <option value="inbox" {{ $source->message_path == 'inbox' ? 'selected' : '' }}>Inbox</option>
+                        <option value="spam" {{ $source->message_path == 'spam' ? 'selected' : '' }}>Spam</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -95,12 +138,12 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label for="header" class="form-label">Message Header</label>
-                    <textarea class="form-control" id="header" name="header" rows="3" required>{{ old('header', $source->header) }}</textarea>
+                    <textarea class="form-control" id="header" name="header" rows="5" required>{{ old('header', $source->header) }}</textarea>
                 </div>
                 
                 <div class="mb-3">
                     <label for="body" class="form-label">Message Body</label>
-                    <textarea class="form-control" id="body" name="body" rows="5" required>{{ old('body', $source->body) }}</textarea>
+                    <textarea class="form-control" id="body" name="body" rows="10" required>{{ old('body', $source->body) }}</textarea>
                 </div>
             </div>
         </div>
