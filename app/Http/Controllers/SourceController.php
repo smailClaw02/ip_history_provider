@@ -53,7 +53,7 @@ class SourceController extends Controller
             'email' => 'required|string',
             'message_path' => 'required|in:inbox,spam',
             'colonne' => 'nullable|string',
-            'redirect_link' => 'nullable|url',
+            'redirect_link' => 'nullable|string',
         ]);
 
         $validated['date'] = Carbon::parse($validated['date']);
@@ -91,7 +91,7 @@ class SourceController extends Controller
             'email' => 'required|string',
             'message_path' => 'required|in:inbox,spam',
             'colonne' => 'nullable|string',
-            'redirect_link' => 'nullable|url',
+            'redirect_link' => 'nullable|string',
         ]);
 
         $validated['date'] = Carbon::parse($validated['date']);
