@@ -1,19 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="py-4 m-auto" style="width: 98%">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">Create New Email Source</div>
+    <div class="m-auto" style="width: 98%">
 
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('sources.store') }}" enctype="multipart/form-data"
-                            id="emailSourceForm">
-                            @csrf
+        <form method="POST" action="{{ route('sources.store') }}" enctype="multipart/form-data" id="emailSourceForm">
+            @csrf
 
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white justify-content-between d-flex">
+                            <h2 class="">Create New Email Source</h2>
+                            <button type="submit" id="processBtn" class="col-auto btn border btn-lg">
+                                <i class="fas fa-save me-2"></i>Save Email Record
+                            </button>
+                        </div>
+                        <div class="card-body">
                             <!-- Header Textarea and File Upload -->
-                            <div class="form-group mb-4">
+                            <div class="form-group mb-3">
                                 <label for="header_text" class="form-label">Email Source</label>
                                 <textarea class="form-control border-primary border-2" id="header_text" name="header_text" rows="15"
                                     placeholder="Paste email headers here..."></textarea>
@@ -51,7 +55,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="ip" class="form-label">IP</label>
-                                        <input type="text" class="form-control" id="ip" name="ip" required>
+                                        <input type="text" class="form-control" id="ip" name="ip">
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -66,13 +70,12 @@
 
                                     <div class="form-group mb-3">
                                         <label for="from" class="form-label">From</label>
-                                        <input type="text" class="form-control" id="from" name="from" required>
+                                        <input type="text" class="form-control" id="from" name="from">
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label for="return_path" class="form-label">Return Path</label>
-                                        <input type="text" class="form-control" id="return_path" name="return_path"
-                                            required>
+                                        <input type="text" class="form-control" id="return_path" name="return_path">
                                     </div>
                                 </div>
 
@@ -81,12 +84,12 @@
                                     <div class="form-group mb-3">
                                         <label for="date" class="form-label">Date</label>
                                         <input type="datetime-local" class="form-control" id="date" name="date"
-                                            required>
+                                            readonly>
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="email" name="email" required>
+                                        <input type="text" class="form-control" id="email" name="email">
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -94,16 +97,10 @@
                                         <input type="text" class="form-control" id="colonne" name="colonne">
                                     </div>
 
-                                    <div class="form-group mb-3">
-                                        <label for="redirect_link" class="form-label">Redirect Link</label>
-                                        <input type="text" class="form-control" id="redirect_link"
-                                            name="redirect_link">
-                                    </div>
-
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="spf" class="form-label">SPF</label>
-                                            <select class="form-select" id="spf" name="spf" required>
+                                            <select class="form-select" id="spf" name="spf">
                                                 <option value="pass">pass</option>
                                                 <option value="fail">fail</option>
                                                 <option value="softfail">softfail</option>
@@ -118,7 +115,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="dkim" class="form-label">DKIM</label>
-                                            <select class="form-select" id="dkim" name="dkim" required>
+                                            <select class="form-select" id="dkim" name="dkim">
                                                 <option value="pass">pass</option>
                                                 <option value="fail">fail</option>
                                                 <option value="policy">policy</option>
@@ -132,7 +129,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="dmarc" class="form-label">DMARC</label>
-                                            <select class="form-select" id="dmarc" name="dmarc" required>
+                                            <select class="form-select" id="dmarc" name="dmarc">
                                                 <option value="pass">pass</option>
                                                 <option value="fail">fail</option>
                                                 <option value="permerror">permerror</option>
@@ -146,7 +143,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="message_path" class="form-label">Message Path</label>
-                                            <select class="form-select" id="message_path" name="message_path" required>
+                                            <select class="form-select" id="message_path" name="message_path">
                                                 <option value="inbox">Inbox</option>
                                                 <option value="spam">Spam</option>
                                             </select>
@@ -154,34 +151,35 @@
                                     </div>
                                 </div>
 
+                                <div class="" style="width: 98.4%;">
+                                    <label for="redirect_link" class="form-label">Redirect Link</label>
+                                    <input type="text" class="form-control" id="redirect_link" name="redirect_link"
+                                        value="https://...">
+                                </div>
+
+                                <hr class="my-4 w-75 m-auto border-3 text-info">
+
                                 <!-- Text Areas -->
-                                <div class="row mt-1">
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="header_display" class="form-label">Email Header</label>
-                                            <textarea class="form-control" id="header_display" name="header" rows="10" required></textarea>
+                                            <textarea class="form-control" id="header_display" name="header" rows="15"></textarea>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="body" class="form-label">Email Body</label>
-                                            <textarea class="form-control" id="body" name="body" rows="10" required></textarea>
+                                            <textarea class="form-control" id="body" name="body" rows="15"></textarea>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Submit Button -->
-                                <div class="form-group mt-4">
-                                    <button type="submit" class="btn btn-success btn-lg w-100">
-                                        <i class="fas fa-save me-2"></i>Save Email Record
-                                    </button>
-                                </div>
-                        </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+        </form>
     </div>
 
     <script>
@@ -438,19 +436,17 @@ Message Path: ${messagePathValue || 'N/A'}`;
             border: 1px solid #ced4da;
         }
 
-        .btn-primary {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
+        #processBtn {
+            transition: all 0.5s ease;
+            border: 1px solid;
+            color: white;
+            background: linear-gradient(#0047ab 60%, #eee 95%, #0047ab 95%);
         }
 
-        .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-        .btn-success {
-            background-color: #198754;
-            border-color: #198754;
+        #processBtn:hover {
+            transform: translateY(-2px);
+            color: #0047ab;
+            background: linear-gradient(#eee 60%, #0047ab 95%, #eee 95%);
         }
     </style>
 @endsection

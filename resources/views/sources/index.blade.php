@@ -16,7 +16,6 @@
                     <th>ID</th>
                     <th>
                         <form method="GET" action="{{ route('sources.index') }}" class="d-flex align-items-end">
-                            IP
                             <input type="text" name="ip_search" class="form-control form-control-sm ms-2"
                                 placeholder="Search IP..." value="{{ request('ip_search') }}">
                             <button type="submit" class="btn btn-sm btn-outline-light ms-2">
@@ -32,13 +31,12 @@
                     <th>
                         <div class="">
                             <input class="form-check-input" type="checkbox" id="highlightSimilar">
-                            <label class="form-check-label" for="highlightSimilar">Show Similar</label>
+                            <label class="form-check-label" for="highlightSimilar">Similar</label>
                         </div>
                     </th>
-                    <th>VMTA</th>
                     <th>From</th>
                     <th>Return-path</th>
-                    <th>Message Path</th>
+                    <th>Message</th>
                     <th>Date</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -65,20 +63,24 @@
                                 <span class="badge bg-secondary">1</span>
                             @endif
                         </td>
-                        <td>{{ $source->vmta }}</td>
-                        <td>{{ $source->from }}</td>
-                        <td>{{ $source->return_path }}</td>
+                        <td>
+                            {{ Str::limit($source->from, 35) }}
+                        </td>
+                        <td>
+                            {{ Str::limit($source->return_path, 35) }}
+                        </td>
                         <td class="text-center">
                             <span class="badge fs-6 bg-{{ $source->message_path === 'inbox' ? 'success' : 'warning' }}">
                                 {{ $source->message_path }}
                             </span>
                         </td>
-                        <td>{{ $source->date->format('Y-m-d H:i') }}</td>
+                        <td>{{ $source->date->format('m-d-Y H:i') }}</td>
                         <td class="text-end action-btns">
                             <a href="{{ route('sources.show', $source->id) }}" class="btn btn-sm btn-info" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('sources.edit', $source->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                            <a href="{{ route('sources.edit', $source->id) }}" class="btn btn-sm btn-warning"
+                                title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <form action="{{ route('sources.destroy', $source->id) }}" method="POST" class="d-inline">
@@ -94,7 +96,7 @@
                 @endforeach
             </tbody>
         </table>
-        
+
         <div class="d-flex justify-content-end my-4">
             <nav aria-label="Pagination navigation" class="pagination-dark">
                 <ul class="pagination">

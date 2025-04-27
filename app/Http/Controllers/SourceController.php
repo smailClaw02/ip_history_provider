@@ -12,21 +12,20 @@ class SourceController extends Controller
     {
         $query = Source::query()->orderBy('date', 'desc');
 
-        if ($request->has('ip_search') && !empty($request->ip_search)) {
-            $searchTerm = $request->ip_search;
-            $query->where('ip', 'like', '%' . $searchTerm . '%');
+        if ($request->filled('ip_search')) {
+            $query->where('ip', 'like', '%' . $request->ip_search . '%');
         }
 
         $sources = $query->paginate(10);
 
-        $allIps = Source::pluck('ip')->toArray();
-        $ipGroups = [];
-
-        foreach ($allIps as $ip) {
-            $ipParts = explode('.', $ip);
-            $prefix = count($ipParts) >= 3 ? implode('.', array_slice($ipParts, 0, 3)) : $ip;
-            $ipGroups[$prefix] = ($ipGroups[$prefix] ?? 0) + 1;
-        }
+        // Improved IP grouping logic
+        $ipGroups = Source::selectRaw(
+            "SUBSTRING_INDEX(ip, '.', 3) as ip_prefix, COUNT(*) as count"
+        )
+            ->groupBy('ip_prefix')
+            ->orderBy('count', 'desc')
+            ->get()
+            ->pluck('count', 'ip_prefix');
 
         return view('sources.index', compact('sources', 'ipGroups'));
     }
@@ -38,24 +37,7 @@ class SourceController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'ip' => 'required|ip',
-            'provider_ip' => 'nullable|string',
-            'from' => 'required|string',
-            'spf' => 'required|in:pass,fail,softfail,neutral,none,permerror,temperror',
-            'dkim' => 'required|in:pass,fail,none,permerror,temperror,policy',
-            'dmarc' => 'required|in:pass,fail,none,permerror,temperror,bestguesspass',
-            'header' => 'required|string',
-            'body' => 'required|string',
-            'vmta' => 'nullable|string',
-            'return_path' => 'required|string',
-            'date' => 'required|date',
-            'email' => 'required|string',
-            'message_path' => 'required|in:inbox,spam',
-            'colonne' => 'nullable|string',
-            'redirect_link' => 'nullable|string',
-        ]);
-
+        $validated = $request->validate(Source::validationRules());
         $validated['date'] = Carbon::parse($validated['date']);
 
         Source::create($validated);
@@ -76,25 +58,7 @@ class SourceController extends Controller
 
     public function update(Request $request, Source $source)
     {
-        $validated = $request->validate([
-            'ip' => 'required|ip',
-            'provider_ip' => 'nullable|string',
-            'from' => 'required|string',
-            'spf' => 'required|in:pass,fail,softfail,neutral,none,permerror,temperror',
-            'dkim' => 'required|in:pass,fail,none,permerror,temperror,policy',
-            'dmarc' => 'required|in:pass,fail,none,permerror,temperror,bestguesspass',
-            'header' => 'required|string',
-            'body' => 'required|string',
-            'vmta' => 'nullable|string',
-            'return_path' => 'required|string',
-            'date' => 'required|date',
-            'email' => 'required|string',
-            'message_path' => 'required|in:inbox,spam',
-            'colonne' => 'nullable|string',
-            'redirect_link' => 'nullable|string',
-        ]);
-
-        $validated['date'] = Carbon::parse($validated['date']);
+        $validated = $request->validate(Source::validationRules($source->id));
         $source->update($validated);
 
         return redirect()->route('sources.index')

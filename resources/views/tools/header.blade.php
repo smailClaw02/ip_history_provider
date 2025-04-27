@@ -40,7 +40,7 @@
                                     <label for="result_domains_for_source" class="form-label fw-bold small">
                                         <i class="fas fa-globe me-1"></i>Domains Found
                                     </label>
-                                    <textarea id="result_domains_for_source" class="form-control border-2 border-primary" rows="9"></textarea>
+                                    <textarea id="result_domains_for_source" class="form-control border-2 border-primary" rows="7"></textarea>
                                 </div>
 
                                 <div class="mb-3">
@@ -51,7 +51,7 @@
                                             <i class="fas fa-search me-1"></i> Verify DNS Records
                                         </button>
                                     </div>
-                                    <textarea id="result_spf_dmarc" class="form-control border-2 border-warning" rows="9"></textarea>
+                                    <textarea id="result_spf_dmarc" class="form-control border-2 border-warning" rows="7"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                 </button>
                             </div>
                             <div class="card-body p-0">
-                                <textarea id="result_header" class="form-control border-0 h-100" rows="11"
+                                <textarea id="result_header" class="form-control border-0 h-100" rows="15"
                                     placeholder="Processed header will appear here..."></textarea>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                                 </button>
                             </div>
                             <div class="card-body p-0">
-                                <textarea id="result_origin" class="form-control border-0 h-100" rows="11"></textarea>
+                                <textarea id="result_origin" class="form-control border-0 h-100" rows="15"></textarea>
                             </div>
                         </div>
                     </div>
@@ -478,15 +478,16 @@
         }
 
         #processBtn {
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             border: 1px solid;
             color: white;
-            background: linear-gradient(135deg, #3a7bd5 0%, #01b6df 100%);
+            background: linear-gradient(#0047ab 60%, #eee 95%, #0047ab 95%);
         }
 
         #processBtn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #0047ab;
+            background: linear-gradient(#eee 60%, #0047ab 95%, #eee 95%);
         }
 
         #checkSpfBtn {

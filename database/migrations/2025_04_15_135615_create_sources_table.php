@@ -10,15 +10,44 @@ return new class extends Migration
     {
         Schema::create('sources', function (Blueprint $table) {
             $table->id();
-            $table->string('ip');
+            $table->string('ip')->index(); // Added index for faster searching
             $table->string('provider_ip')->nullable();
             $table->string('vmta')->nullable();
             $table->string('from');
             $table->string('return_path');
-            $table->enum('spf', ['pass', 'fail', 'softfail', 'neutral', 'none', 'permerror', 'temperror']);
-            $table->enum('dkim', ['pass', 'fail', 'none', 'permerror', 'temperror', 'policy']);
-            $table->enum('dmarc', ['pass', 'fail', 'none', 'permerror', 'temperror', 'bestguesspass']);
-            $table->timestamp('date');
+
+            // SPF: Sender Policy Framework results
+            $table->enum('spf', [
+                'pass',       // SPF check passed
+                'fail',        // SPF check failed
+                'softfail',    // SPF soft fail
+                'neutral',     // SPF neutral
+                'none',        // No SPF record
+                'permerror',   // Permanent error
+                'temperror'    // Temporary error
+            ]);
+
+            // DKIM: DomainKeys Identified Mail results
+            $table->enum('dkim', [
+                'pass',       // DKIM check passed
+                'fail',       // DKIM check failed
+                'none',       // No DKIM record
+                'permerror', // Permanent error
+                'temperror', // Temporary error
+                'policy'     // Policy related failure
+            ]);
+
+            // DMARC: Domain-based Message Authentication results
+            $table->enum('dmarc', [
+                'pass',         // DMARC check passed
+                'fail',          // DMARC check failed
+                'none',         // No DMARC record
+                'permerror',     // Permanent error
+                'temperror',     // Temporary error
+                'bestguesspass'  // Best guess pass
+            ]);
+
+            $table->datetime('date')->index(); // Added index for faster sorting
             $table->string('email');
             $table->enum('message_path', ['inbox', 'spam']);
             $table->string('colonne')->nullable();
