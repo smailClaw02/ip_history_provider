@@ -42,6 +42,9 @@ class SourceController extends Controller
 
         Source::create($validated);
 
+        // Archive after creation
+        ArchiveController::sources();
+
         return redirect()->route('sources.index')
             ->with('success', 'Source created successfully.');
     }
@@ -60,6 +63,9 @@ class SourceController extends Controller
     {
         $validated = $request->validate(Source::validationRules($source->id));
         $source->update($validated);
+        
+        // Archive after update
+        ArchiveController::sources();
 
         return redirect()->route('sources.index')
             ->with('success', 'Source updated successfully.');
@@ -68,6 +74,10 @@ class SourceController extends Controller
     public function destroy(Source $source)
     {
         $source->delete();
+
+        // Archive after deletion
+        ArchiveController::sources();
+
         return redirect()->route('sources.index')
             ->with('success', 'Source deleted successfully.');
     }

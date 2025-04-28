@@ -9,7 +9,18 @@ Route::get('/', function () {
 
 
 Route::resource('sources', SourceController::class);
-Route::post('/emails', 'EmailController@store')->name('emails.store');
+
+Route::get('/archive-sources', function() {
+    App\Http\Controllers\ArchiveController::sources();
+    return back()->with('success', 'Sources archived successfully!');
+});
+
+// In routes/web.php
+Route::post('/archive-sources', function() {
+    App\Http\Controllers\ArchiveController::sources();
+    return back()->with('success', 'Sources archived successfully!');
+})->name('archive.sources');
+
 
 Route::prefix('tools')->group(function () {
     // random

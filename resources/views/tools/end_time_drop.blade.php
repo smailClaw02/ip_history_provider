@@ -16,7 +16,7 @@
                     <div class="col-md-5">
                         <label for="sleep" class="form-label fw-bold">Sleep Time (seconds)</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="sleep" value="60" min="1" required>
+                            <input type="number" class="form-control" id="sleep" value="60" min="1">
                             <button type="button" class="btn btn-secondary" id="calcSleepBtn">
                                 <i class="fas fa-calculator"></i> Calculate Sleep
                             </button>

@@ -52,7 +52,7 @@ return new class extends Migration
             $table->enum('message_path', ['inbox', 'spam']);
             $table->string('colonne')->nullable();
             $table->string('redirect_link')->nullable();
-            $table->text('header');
+            $table->mediumText('header');
             $table->longText('body');
             $table->timestamps();
         });

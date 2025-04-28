@@ -9,7 +9,12 @@
                 <i class="fas fa-plus"></i> Add New Source
             </a>
         </div>
-
+<form action="{{ route('archive.sources') }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-secondary">
+        Archive All Sources
+    </button>
+</form>
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
