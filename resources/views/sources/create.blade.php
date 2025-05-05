@@ -11,37 +11,52 @@
                     <div class="card">
                         <div class="card-header bg-primary text-white justify-content-between d-flex">
                             <h2 class="">Create New Email Source</h2>
-                            <button type="submit" id="processBtn" class="col-auto btn border btn-lg">
+                            <button type="submit" id="processBtn" class="col-auto btn border btn-lg shadow">
                                 <i class="fas fa-save me-2"></i>Save Email Record
                             </button>
                         </div>
                         <div class="card-body">
                             <!-- Header Textarea and File Upload -->
-                            <div class="form-group mb-3">
-                                <label for="header_text" class="form-label">Email Source</label>
-                                <textarea class="form-control border-primary border-2" id="header_text" name="header_text" rows="15"
-                                    placeholder="Paste email headers here..."></textarea>
-                                <div class="mt-2">
-                                    <label for="email_file" class="form-label text-primary">Or upload Email Source
-                                        file:</label>
-                                    <input type="file" id="email_file" name="email_file"
-                                        class="form-control border p-2 rounded" accept=".eml,.txt,.msg" />
-                                </div>
-                            </div>
 
                             <!-- Action Buttons -->
                             <div class="row mb-4 justify-content-between">
-                                <div class="col-md-8">
-                                    <button type="button" onclick="parseHeaders()" class="btn btn-primary btn-lg w-100">
-                                        <i class="fas fa-filter me-2"></i>Filter & Parse Headers
-                                    </button>
+                                {{-- Email Source --}}
+                                <div class="col-md-9">
+                                    <label for="header_text" class="form-label">Email Source</label>
+                                    <textarea class="form-control border-primary border-2" id="header_text" name="header_text" rows="15"
+                                        placeholder="Paste email headers here..."></textarea>
+
                                 </div>
-                                <div class="col-md-4 mt-2 mt-md-0">
-                                    <button type="button" onclick="resetFields()" class="btn btn-danger btn-lg w-100">
-                                        <i class="fas fa-trash-alt me-2"></i>Clear All
-                                    </button>
+
+                                {{-- Or upload Email Source file:, Filter & Parse Headers,Clear All --}}
+                                <div class="col-md-3 mt-3">
+                                    {{-- Or upload Email Source file: --}}
+                                    <div class="col-md-auto m-2">
+                                        <label for="email_file" class="form-label text-primary">Or upload Email Source
+                                            file:</label>
+                                        <input type="file" id="email_file" name="email_file"
+                                            class="form-control border p-2 rounded shadow" accept=".eml,.txt,.msg" />
+                                    </div>
+
+                                    {{-- Filter & Parse Headers --}}
+                                    <div class="col-md-auto m-2 mt-5">
+                                        <button type="button" onclick="parseHeaders()"
+                                            class="btn btn-primary btn-lg w-100">
+                                            <i class="fas fa-filter me-2"></i>Filter & Parse Headers
+                                        </button>
+                                    </div>
+
+                                    {{-- Clear All --}}
+                                    <div class="col-md-auto m-2">
+                                        <button type="button" onclick="resetFields()"
+                                            class="btn btn-outline-danger btn-lg w-100">
+                                            <i class="fas fa-trash-alt me-2"></i>Clear All
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+
+                            <hr class="my-4 w-75 m-auto border-3 text-info">
 
                             <!-- Parsed Results Display -->
                             <div class="alert alert-info mb-4" id="parseResults" style="display:none;">

@@ -111,7 +111,7 @@
                         <h5>Header:</h5>
                         <button class="btn btn-success copy-header">Copy Header</button>
                     </div>
-                    <textarea rows="15" class="form-control email-header" readonly>{{ $source->header }}</textarea>
+                    <textarea rows="15" class="form-control email-header">{{ $source->header }}</textarea>
                 </div>
 
                 <div>
@@ -119,7 +119,7 @@
                         <h5>Body:</h5>
                         <button class="btn btn-success copy-body">Copy Body</button>
                     </div>
-                    <textarea rows="15" class="form-control email-body" readonly>{{ $source->body }}</textarea>
+                    <textarea rows="15" class="form-control email-body">{{ $source->body }}</textarea>
                 </div>
             </div>
         </div>
