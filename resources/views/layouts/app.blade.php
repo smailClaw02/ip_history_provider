@@ -164,6 +164,12 @@
                             <a class="nav-link badge bg-secondary p-2 fs-6"
                                 href="{{ route('tools.random') }}">Random</a>
                         </li>
+
+                        <li class="nav-item p-2">
+                            <a class="nav-link" href="{{ route('tools.cpanel-checker') }}">
+                                <i class="bi bi-shield-check"></i> cPanel Checker
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -187,7 +193,8 @@
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"> -->
     <script>
         // Theme Toggle Functionality
         const themeToggle = document.getElementById('themeToggle');

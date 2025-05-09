@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SourceController;  
+use App\Http\Controllers\SourceController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -57,5 +58,13 @@ Route::prefix('tools')->group(function () {
     Route::get('header-processor', function() {
         return view('tools.header');
     })->name('tools.header-processor');
+
+    Route::get('cpanel-checker', [\App\Http\Controllers\Tools\CpanelCheckerController::class, 'index'])
+        ->name('tools.cpanel-checker');
+    Route::get('cpanel-checker/stats', [\App\Http\Controllers\Tools\CpanelCheckerController::class, 'stats'])
+        ->name('tools.cpanel-checker.stats');
+    Route::post('cpanel-checker/start', [\App\Http\Controllers\Tools\CpanelCheckerController::class, 'start'])
+        ->name('tools.cpanel-checker.start');
+
 });
 
