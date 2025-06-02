@@ -166,9 +166,13 @@
                         </li>
 
                         <li class="nav-item p-2">
-                            <a class="nav-link" href="{{ route('tools.cpanel-checker') }}">
-                                <i class="bi bi-shield-check"></i> cPanel Checker
-                            </a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                                href="{{ route('index') }}">List Offers</a>
+                        </li>
+
+                        <li class="nav-item p-2">
+                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                                href="{{ route('tools.cpanel-checker') }}">cPanel Checker</a>
                         </li>
                     </ul>
                 </div>

@@ -63,10 +63,10 @@
                             @endif
                         </td>
                         <td>
-                            {{ Str::limit($source->from, 35) }}
+                            {{ Str::limit($source->from, 30) }}
                         </td>
                         <td>
-                            {{ Str::limit($source->return_path, 35) }}
+                            {{ Str::limit($source->return_path, 30) }}
                         </td>
                         <td class="text-center">
                             <span class="badge fs-6 bg-{{ $source->message_path === 'inbox' ? 'success' : 'warning' }}">

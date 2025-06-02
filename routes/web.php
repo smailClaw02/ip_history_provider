@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SourceController;
+use App\Http\Controllers\Tools\OfferController;
 
 
 Route::get('/', function () {
@@ -65,6 +66,20 @@ Route::prefix('tools')->group(function () {
         ->name('tools.cpanel-checker.stats');
     Route::post('cpanel-checker/start', [\App\Http\Controllers\Tools\CpanelCheckerController::class, 'start'])
         ->name('tools.cpanel-checker.start');
+
+    Route::prefix('offers')->group(function () {
+        Route::get('/', [OfferController::class, 'index'])->name('index');
+        Route::get('/create', [OfferController::class, 'create'])->name('create');
+        Route::post('/', [OfferController::class, 'store'])->name('store');
+        Route::get('/{offer}', [OfferController::class, 'show'])->name('show');
+        Route::get('/{offer}/edit', [OfferController::class, 'edit'])->name('edit');
+        Route::match(['put', 'patch'], 'offers/{offer}', [OfferController::class, 'update'])->name('update');
+        Route::delete('/{offer}', [OfferController::class, 'destroy'])->name('destroy');
+        Route::post('/{offer}/increment-lead', [OfferController::class, 'incrementLead'])
+             ->name('tools.offers.increment-lead');
+        Route::post('/{offer}/decrement-lead', [OfferController::class, 'decrementLead'])
+             ->name('tools.offers.decrement-lead');
+    });
 
 });
 

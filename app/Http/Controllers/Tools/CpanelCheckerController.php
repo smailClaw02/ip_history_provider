@@ -214,4 +214,5 @@ class CpanelCheckerController extends Controller
             'error' => null
         ];
     }
+
 }
