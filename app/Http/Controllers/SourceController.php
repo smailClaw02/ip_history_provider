@@ -10,17 +10,32 @@ class SourceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Source::query()->orderBy('date', 'desc');
+        $query = Source::query();
 
+        // Date filtering (only if date_filter parameter exists)
+        if ($request->filled('date_filter')) {
+            $date = Carbon::parse($request->date_filter);
+            $query->whereDate('date', $date);
+        }
+
+        // IP search
         if ($request->filled('ip_search')) {
             $query->where('ip', 'like', '%' . $request->ip_search . '%');
         }
 
-        $sources = $query->paginate(10);
+        // ID sorting (default to date desc if no sort specified)
+        if ($request->filled('sort')) {
+            $query->orderBy('id', $request->sort);
+        }
+        
+        // Always sort by date descending as secondary sort
+        $query->orderBy('date', 'desc');
 
-        // Improved IP grouping logic
+        $sources = $query->paginate(20);
+
+        // IP grouping by first two octets
         $ipGroups = Source::selectRaw(
-            "SUBSTRING_INDEX(ip, '.', 3) as ip_prefix, COUNT(*) as count"
+            "SUBSTRING_INDEX(ip, '.', 2) as ip_prefix, COUNT(*) as count"
         )
             ->groupBy('ip_prefix')
             ->orderBy('count', 'desc')

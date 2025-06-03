@@ -5,14 +5,53 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>IP History Provider</h1>
-            <a href="{{ route('sources.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Source
-            </a>
+
+            <div class="row">
+            	<!-- Hidden Date Filter Form -->
+            	<div class="col-auto row" id="dateFilterContainer" style="display: none;">
+            		<div class="col-auto">
+                        <form method="GET" action="{{ route('sources.index') }}" class="input-group">
+                            <input type="date" name="date_filter" class="form-control" 
+                               value="{{ request('date_filter') }}">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            @if(request('date_filter'))
+                                <a href="{{ route('sources.index') }}" class="btn btn-outline-danger">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            @endif
+                        </form>
+            		</div>
+            	</div>
+
+                <div class="col-auto">
+                    <button id="toggleDateFilter" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-calendar-alt"></i> Filter by Date
+                    </button>
+                    <a href="{{ route('sources.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Source
+                    </a>
+                </div>
+                
+            </div>
         </div>
+
+
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>
+                        <a href="{{ route('sources.index', array_merge(request()->except('sort'), ['sort' => request('sort') === 'asc' ? 'desc' : 'asc'])) }}" 
+                           class="text-white text-decoration-none">
+                            ID 
+                            @if(request('sort') === 'asc')
+                                <i class="fas fa-sort-up"></i>
+                            @else
+                                <i class="fas fa-sort-down"></i>
+                            @endif
+                        </a>
+                    </th>
                     <th>
                         <form method="GET" action="{{ route('sources.index') }}" class="d-flex align-items-end">
                             <input type="text" name="ip_search" class="form-control form-control-sm ms-2"
@@ -44,10 +83,10 @@
                 @foreach ($sources as $source)
                     @php
                         $ipParts = explode('.', $source->ip);
-                        $ipPrefix = count($ipParts) >= 3 ? implode('.', array_slice($ipParts, 0, 3)) : $source->ip;
+                        $ipPrefix = count($ipParts) >= 2 ? implode('.', array_slice($ipParts, 0, 2)) : $source->ip;
                         $similarCount = $ipGroups[$ipPrefix] ?? 1;
-                        $hue = abs(crc32($ipPrefix)) % 1000;
-                        $color = "hsl({$hue}, 100%, 75%)";
+                        $hue = abs(crc32($ipPrefix)) % 360;
+                        $color = "hsl({$hue}, 80%, 80%)";
                     @endphp
                     <tr class="ip-row" data-ip-prefix="{{ $ipPrefix }}" data-similar-count="{{ $similarCount }}"
                         data-highlight-color="{{ $color }}" data-ip="{{ $source->ip }}">
@@ -63,10 +102,10 @@
                             @endif
                         </td>
                         <td>
-                            {{ Str::limit($source->from, 30) }}
+                            {{ Str::limit($source->from, 35) }}
                         </td>
                         <td>
-                            {{ Str::limit($source->return_path, 30) }}
+                            {{ Str::limit($source->return_path, 35) }}
                         </td>
                         <td class="text-center">
                             <span class="badge fs-6 bg-{{ $source->message_path === 'inbox' ? 'success' : 'warning' }}">
@@ -96,17 +135,10 @@
             </tbody>
         </table>
 
-        <!-- <form action="{{ route('archive.sources') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-secondary">
-                Archive All Sources
-            </button>
-        </form> -->
-
         <div class="d-flex justify-content-end my-4">
             <nav aria-label="Pagination navigation" class="pagination-dark">
                 <ul class="pagination">
-                    {{ $sources->links('pagination::bootstrap-4') }}
+                    {{ $sources->appends(request()->query())->links('pagination::bootstrap-4') }}
                 </ul>
             </nav>
         </div>
@@ -114,6 +146,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Toggle date filter visibility
+            const toggleDateFilter = document.getElementById('toggleDateFilter');
+            const dateFilterContainer = document.getElementById('dateFilterContainer');
+            
+            toggleDateFilter.addEventListener('click', function() {
+                dateFilterContainer.style.display = dateFilterContainer.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Highlight similar IPs
             const toggle = document.getElementById('highlightSimilar');
 
             function applyHighlighting(enable) {
