@@ -20,12 +20,12 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Image</th>
                 <th>Offer ID</th>
                 <th>Category</th>
                 <th>Name</th>
                 <th>Revenue</th>
                 <th>Lead</th>
-                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -33,6 +33,20 @@
             @foreach($offers as $offer)
             <tr data-id="{{ $offer->id }}">
                 <td>{{ $offer->id }}</td>
+                <td>
+                    @if($offer->img && $offer->img !== 'not found')
+                        <img src="{{ $offer->img }}" 
+                             alt="{{ $offer->name }}" 
+                             style="max-width: 100px; height: auto;" 
+                             class="img-thumbnail"
+                             onerror="this.onerror=null;this.src='https://via.placeholder.com/100?text=Image+Error'">
+                    @else
+                    <img src="{{ asset('storage/image.png') }}" 
+                             alt="{{ $offer->name }}" 
+                             style="max-width: 100px; height: auto;" 
+                             class="rounded mx-auto d-block">
+                    @endif
+                </td>
                 <td>{{ $offer->id_offer }}</td>
                 <td>{{ $offer->category }}</td>
                 <td>
@@ -51,17 +65,6 @@
                         <button onclick="updateLeadCount({{ $offer->id }}, 'increment')" 
                                 class="btn btn-sm btn-success ms-1">+</button>
                     </div>
-                </td>
-                <td>
-                    @if($offer->img && $offer->img !== 'not found')
-                        <img src="{{ $offer->img }}" 
-                             alt="{{ $offer->name }}" 
-                             style="max-width: 100px; height: auto;" 
-                             class="img-thumbnail"
-                             onerror="this.onerror=null;this.src='https://via.placeholder.com/100?text=Image+Error'">
-                    @else
-                        <span class="badge bg-secondary">No Image</span>
-                    @endif
                 </td>
                 <td>
                     <a href="{{ route('edit', $offer->id) }}" 

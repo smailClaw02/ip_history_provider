@@ -7,23 +7,23 @@
             <h1>IP History Provider</h1>
 
             <div class="row">
-            	<!-- Hidden Date Filter Form -->
-            	<div class="col-auto row" id="dateFilterContainer" style="display: none;">
-            		<div class="col-auto">
+                <!-- Hidden Date Filter Form -->
+                <div class="col-auto row" id="dateFilterContainer" style="display: none;">
+                    <div class="col-auto">
                         <form method="GET" action="{{ route('sources.index') }}" class="input-group">
-                            <input type="date" name="date_filter" class="form-control" 
-                               value="{{ request('date_filter') }}">
+                            <input type="date" name="date_filter" class="form-control"
+                                value="{{ request('date_filter') }}">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-search"></i>
                             </button>
-                            @if(request('date_filter'))
+                            @if (request('date_filter'))
                                 <a href="{{ route('sources.index') }}" class="btn btn-outline-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
                             @endif
                         </form>
-            		</div>
-            	</div>
+                    </div>
+                </div>
 
                 <div class="col-auto">
                     <button id="toggleDateFilter" class="btn btn-outline-secondary me-2">
@@ -33,19 +33,17 @@
                         <i class="fas fa-plus"></i> Add New Source
                     </a>
                 </div>
-                
+
             </div>
         </div>
-
-
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
                     <th>
-                        <a href="{{ route('sources.index', array_merge(request()->except('sort'), ['sort' => request('sort') === 'asc' ? 'desc' : 'asc'])) }}" 
-                           class="text-white text-decoration-none">
-                            ID 
-                            @if(request('sort') === 'asc')
+                        <a href="{{ route('sources.index', array_merge(request()->except('sort'), ['sort' => request('sort') === 'asc' ? 'desc' : 'asc'])) }}"
+                            class="text-white text-decoration-none">
+                            ID
+                            @if (request('sort') === 'asc')
                                 <i class="fas fa-sort-up"></i>
                             @else
                                 <i class="fas fa-sort-down"></i>
@@ -53,10 +51,10 @@
                         </a>
                     </th>
                     <th>
-                        <form method="GET" action="{{ route('sources.index') }}" class="d-flex align-items-end">
-                            <input type="text" name="ip_search" class="form-control form-control-sm ms-2"
-                                placeholder="Search IP..." value="{{ request('ip_search') }}">
-                            <button type="submit" class="btn btn-sm btn-outline-light ms-2">
+                        <form method="GET" action="{{ route('sources.index') }}" class="d-flex">
+                            <input type="text" name="ip_search" class="form-control form-control-sm"
+                               placeholder="Search IP..." value="{{ request('ip_search') }}">
+                            <button type="submit" class="btn btn-sm btn-outline-light">
                                 <i class="fas fa-search"></i>
                             </button>
                             @if (request('ip_search'))
@@ -74,6 +72,7 @@
                     </th>
                     <th>From</th>
                     <th>Return-path</th>
+                    <th>Domains</th>
                     <th>Message</th>
                     <th>Date</th>
                     <th class="text-center">Actions</th>
@@ -87,9 +86,28 @@
                         $similarCount = $ipGroups[$ipPrefix] ?? 1;
                         $hue = abs(crc32($ipPrefix)) % 360;
                         $color = "hsl({$hue}, 80%, 80%)";
+
+                        // Extract domains from from and return_path
+                        $domains = [];
+                        if (!empty($source->from)) {
+                            $fromParts = explode('@', $source->from);
+                            if (count($fromParts) > 1) {
+                                $domains[] = trim($fromParts[1]);
+                            }
+                        }
+                        if (!empty($source->return_path)) {
+                            $returnParts = explode('@', $source->return_path);
+                            if (count($returnParts) > 1) {
+                                $domain = trim($returnParts[1]);
+                                if (!in_array($domain, $domains)) {
+                                    $domains[] = $domain;
+                                }
+                            }
+                        }
                     @endphp
-                    <tr class="ip-row" data-ip-prefix="{{ $ipPrefix }}" data-similar-count="{{ $similarCount }}"
-                        data-highlight-color="{{ $color }}" data-ip="{{ $source->ip }}">
+                    <tr class="ip-row" data-ip-prefix="{{ $ipPrefix }}"
+                        data-similar-count="{{ $similarCount }}" data-highlight-color="{{ $color }}"
+                        data-ip="{{ $source->ip }}">
                         <td>{{ $source->id }}</td>
                         <td class="text-center">
                             <span class="ip-address text-center">{{ $source->ip }}</span>
@@ -102,21 +120,28 @@
                             @endif
                         </td>
                         <td>
-                            {{ Str::limit($source->from, 35) }}
+                            <a href="{{ route('sources.show', $source->id) }}" class="text-decoration-none text-from-show">
+                                <b>{{ Str::limit($source->from, 30) }}</b>
+                            </a>
                         </td>
                         <td>
-                            {{ Str::limit($source->return_path, 35) }}
+                            {{ Str::limit($source->return_path, 30) }}
+                        </td>
+                        <td>
+                            @if (!empty($domains))
+                                @foreach ($domains as $domain)
+                                    {{ $domain }}<br>
+                                @endforeach
+                            @endif
                         </td>
                         <td class="text-center">
                             <span class="badge fs-6 bg-{{ $source->message_path === 'inbox' ? 'success' : 'warning' }}">
+                                {{-- {{ $source->message_path === 'inbox' ? 'In' : 'Sp' }} --}}
                                 {{ $source->message_path }}
                             </span>
                         </td>
                         <td>{{ $source->date->format('m-d-Y H:i') }}</td>
                         <td class="text-end action-btns">
-                            <a href="{{ route('sources.show', $source->id) }}" class="btn btn-sm btn-info" title="View">
-                                <i class="fas fa-eye"></i>
-                            </a>
                             <a href="{{ route('sources.edit', $source->id) }}" class="btn btn-sm btn-warning"
                                 title="Edit">
                                 <i class="fas fa-edit"></i>
@@ -149,9 +174,10 @@
             // Toggle date filter visibility
             const toggleDateFilter = document.getElementById('toggleDateFilter');
             const dateFilterContainer = document.getElementById('dateFilterContainer');
-            
+
             toggleDateFilter.addEventListener('click', function() {
-                dateFilterContainer.style.display = dateFilterContainer.style.display === 'none' ? 'block' : 'none';
+                dateFilterContainer.style.display = dateFilterContainer.style.display === 'none' ? 'block' :
+                    'none';
             });
 
             // Highlight similar IPs
