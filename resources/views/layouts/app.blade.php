@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" target="_blank">
 
 <head>
     <meta charset="utf-8">
@@ -126,7 +126,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2 fixed-top">
         <div class="row w-100 justify-content-between align-items-center">
             <div class="col-auto">
                 <a class="navbar-brand mx-3" href="{{ route('sources.index') }}"><b class="shado">IP History
@@ -137,42 +137,42 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('tools.header-processor') }}">Header</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6" 
+                                href="{{ route('tools.header-processor') }}" target="_blank">Header</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('tools.body-filter') }}">Body</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6" 
+                                href="{{ route('tools.body-filter') }}" target="_blank">Body</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('tools.spf-dmarc') }}">SPF & DMARC</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6"  
+                                href="{{ route('tools.spf-dmarc') }}" target="_blank">SPF & DMARC</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('tools.end-time-drop') }}">End Time Drop</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6" 
+                                href="{{ route('tools.end-time-drop') }}" target="_blank">End Time Drop</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('tools.x-delay') }}">X-delay</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6" 
+                                href="{{ route('tools.x-delay') }}" target="_blank">X-delay</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('tools.copy-count') }}">Text Multiplier Tool</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6"  
+                                href="{{ route('tools.copy-count') }}" target="_blank">Text Multiplier Tool</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('tools.random') }}">Random</a>
-                        </li>
-
-                        <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('index') }}">List Offers</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6" 
+                                href="{{ route('tools.random') }}" target="_blank">Random</a>
                         </li>
 
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
-                                href="{{ route('tools.cpanel-checker') }}">cPanel Checker</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6" 
+                                href="{{ route('index') }}" target="_blank">List Offers</a>
+                        </li>
+
+                        <li class="nav-item p-2">
+                            <a class="nav-link badge bg-secondary p-2 fs-6" 
+                                href="{{ route('tools.cpanel-checker') }}" target="_blank">cPanel Checker</a>
                         </li>
                     </ul>
                 </div>
@@ -198,12 +198,10 @@
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-        -- >
-        <
-        script >
-            // Theme Toggle Functionality
-            const themeToggle = document.getElementById('themeToggle');
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"> -->
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const htmlElement = document.documentElement;
 
