@@ -80,6 +80,43 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    // Pre-process domains to count occurrences and assign colors
+                    $domainColors = [];
+                    $allDomains = [];
+                    
+                    foreach ($sources as $source) {
+                        $domains = [];
+                        if (!empty($source->from)) {
+                            $fromParts = explode('@', $source->from);
+                            if (count($fromParts) > 1) {
+                                $domains[] = trim($fromParts[1]);
+                            }
+                        }
+                        if (!empty($source->return_path)) {
+                            $returnParts = explode('@', $source->return_path);
+                            if (count($returnParts) > 1) {
+                                $domain = trim($returnParts[1]);
+                                if (!in_array($domain, $domains)) {
+                                    $domains[] = $domain;
+                                }
+                            }
+                        }
+                        
+                        foreach ($domains as $domain) {
+                            $allDomains[$domain] = isset($allDomains[$domain]) ? $allDomains[$domain] + 1 : 1;
+                        }
+                    }
+                    
+                    // Assign colors to domains that appear more than once
+                    foreach ($allDomains as $domain => $count) {
+                        if ($count > 1) {
+                            $hue = abs(crc32($domain)) % 360;
+                            $domainColors[$domain] = "hsl({$hue}, 80%, 80%)";
+                        }
+                    }
+                @endphp
+                
                 @foreach ($sources as $source)
                     @php
                         $ipParts = explode('.', $source->ip);
@@ -131,7 +168,14 @@
                         <td>
                             @if (!empty($domains))
                                 @foreach ($domains as $domain)
-                                    {{ $domain }}<br>
+                                    @if (isset($domainColors[$domain]))
+                                        <span class="domain-badge" style="background-color: {{ $domainColors[$domain] }}; padding: 2px 5px; border-radius: 3px; color: black;">
+                                            {{ $domain }} ({{ $allDomains[$domain] }})
+                                        </span>
+                                    @else
+                                        {{ $domain }}
+                                    @endif
+                                    <br>
                                 @endforeach
                             @endif
                         </td>
