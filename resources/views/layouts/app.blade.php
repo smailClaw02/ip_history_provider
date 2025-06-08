@@ -126,7 +126,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="row w-100 justify-content-between align-items-center">
             <div class="col-auto">
                 <a class="navbar-brand mx-3" href="{{ route('sources.index') }}"><b class="shado">IP History
@@ -137,41 +137,41 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
                                 href="{{ route('tools.header-processor') }}">Header</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
                                 href="{{ route('tools.body-filter') }}">Body</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('tools.spf-dmarc') }}">SPF &
-                                DMARC</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
+                                href="{{ route('tools.spf-dmarc') }}">SPF & DMARC</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
                                 href="{{ route('tools.end-time-drop') }}">End Time Drop</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
                                 href="{{ route('tools.x-delay') }}">X-delay</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6" href="{{ route('tools.copy-count') }}">Text
-                                Multiplier Tool</a>
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
+                                href="{{ route('tools.copy-count') }}">Text Multiplier Tool</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
                                 href="{{ route('tools.random') }}">Random</a>
                         </li>
 
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
                                 href="{{ route('index') }}">List Offers</a>
                         </li>
 
                         <li class="nav-item p-2">
-                            <a class="nav-link badge bg-secondary p-2 fs-6"
+                            <a class="nav-link badge bg-secondary p-2 fs-6" target="_blank"
                                 href="{{ route('tools.cpanel-checker') }}">cPanel Checker</a>
                         </li>
                     </ul>
@@ -191,17 +191,19 @@
         </div>
     </nav>
 
-    <div class="m-auto">
+    <div class="m-auto" style="margin-top: 4rem !important;">
         @yield('content')
     </div>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"> -->
-    <script>
-        // Theme Toggle Functionality
-        const themeToggle = document.getElementById('themeToggle');
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+        -- >
+        <
+        script >
+            // Theme Toggle Functionality
+            const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const htmlElement = document.documentElement;
 

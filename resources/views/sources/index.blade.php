@@ -3,7 +3,7 @@
 @section('title', 'All Sources')
 @section('content')
     <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
             <h1>IP History Provider</h1>
 
             <div class="row">
@@ -36,6 +36,7 @@
 
             </div>
         </div>
+        
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
